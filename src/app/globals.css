@@ -423,7 +423,7 @@ html[data-theme="dark"] main section > *,
 html[data-theme="dark"] footer {
   background-color: #171614 !important;
 }
-html[data-theme="dark"] main *:not(img):not(video):not(picture):not(canvas):not(svg):not(path):not(.btn-primary):not(.btn-ghost):not(.sb-floating-book):not(.sb-theme-toggle) {
+html[data-theme="dark"] main *:not(img):not(video):not(picture):not(canvas):not(svg):not(path):not(.btn-primary):not(.btn-ghost):not(.sb-floating-book):not(.sb-theme-toggle):not(.sb-admin-gold) {
   background-color: transparent !important;
 }
 html[data-theme="dark"] main article,
@@ -840,7 +840,7 @@ html[data-theme="dark"] .package-action:hover, html[data-theme="dark"] .package-
 /* White horizontal logo shown while the navbar sits over the hero video. */
 .sb-logo-white {
   display: block;
-  width: min(210px, calc(100vw - 112px));
+  width: min(210px, calc(100vw - 168px));
 }
 @media (min-width: 640px) {
   .sb-logo-white { width: 230px; }
@@ -965,3 +965,25 @@ html[data-theme="dark"] main > section:nth-of-type(even):not(#home):not(#contact
 /* Footer tagline under the logo. */
 .sb-footer .sb-footer-tagline { color: rgba(244, 239, 231, .85); }
 .sb-footer .sb-footer-tagline-accent { color: #D6B56D; }
+
+/* Contact: booking line under the description. */
+html[data-theme] body #contact .sb-contact-booking { color: rgba(255, 255, 255, .78) !important; }
+html[data-theme] body #contact .sb-contact-booking-link { color: #D6B56D !important; font-weight: 500; }
+
+/* Admin: keep primary gold buttons gold in dark mode. */
+html[data-theme] body .sb-admin-gold { background-color: #B68A35 !important; color: #fff !important; }
+html[data-theme] body .sb-admin-gold:hover { background-color: #9f762c !important; }
+
+/* Header WhatsApp icon: gold-outlined square, matching the menu/footer icons. */
+nav[aria-label="Primary navigation"] .sb-nav-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(214, 181, 109, .7);
+  border-radius: 2px;
+  color: #D6B56D;
+  transition: background-color .2s ease, color .2s ease, border-color .2s ease;
+}
+nav[aria-label="Primary navigation"] .sb-nav-whatsapp:hover,
+nav[aria-label="Primary navigation"] .sb-nav-whatsapp:focus-visible { background-color: #B68A35; border-color: #B68A35; color: #fff; }

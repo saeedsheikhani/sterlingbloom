@@ -17,8 +17,6 @@ export async function POST(request) {
     const phone = clean(body.phone, 40);
     const eventType = clean(body.eventType, 80);
     const eventDate = clean(body.eventDate, 10);
-    const venue = clean(body.venue, 180);
-    const guestCount = clean(body.guestCount, 20);
     const budget = clean(body.budget, 80);
     const message = clean(body.message, 3000);
 
@@ -42,7 +40,7 @@ export async function POST(request) {
     }
 
     await connectDB();
-    const inquiry = await Inquiry.create({ role, name, email, phone, eventType, eventDate, venue, guestCount, budget, message });
+    const inquiry = await Inquiry.create({ role, name, email, phone, eventType, eventDate, budget, message });
 
     let emailSent = false;
     let emailStatus = "missing_config";
@@ -60,7 +58,6 @@ export async function POST(request) {
             subject: `New Sterling Bloom inquiry — ${eventType}`,
             from_name: "Sterling Bloom Website",
             role, name, email, phone, eventType, eventDate: eventDate || "Not provided",
-            venue: venue || "Not provided", guestCount: guestCount || "Not provided",
             budget: budget || "Not provided", message,
             botcheck: "",
           }),

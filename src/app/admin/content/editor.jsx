@@ -662,6 +662,11 @@ export default function ContentEditor({ initialContent }) {
           <Field label="Form Button" value={content.contact.formButton} onChange={(v) => update("contact", "formButton", v)} />
         </div>
         <Field label="Description" value={content.contact.description} onChange={(v) => update("contact", "description", v)} multiline />
+        <div className="grid gap-5 sm:grid-cols-3">
+          <Field label="Booking Line: Start" value={content.contact.bookingIntro ?? "Ready to talk?"} onChange={(v) => update("contact", "bookingIntro", v)} />
+          <Field label="Booking Line: Link Text" value={content.contact.bookingLinkText ?? "Book a consultation"} onChange={(v) => update("contact", "bookingLinkText", v)} hint="Opens the Calendly popup." />
+          <Field label="Booking Line: End" value={content.contact.bookingOutro ?? "directly, or send us a few details below."} onChange={(v) => update("contact", "bookingOutro", v)} />
+        </div>
         <Field label="Consultation Note" value={content.contact.note} onChange={(v) => update("contact", "note", v)} />
         <Field label="Form Description" value={content.contact.formDescription} onChange={(v) => update("contact", "formDescription", v)} />
         <Field label="Form Footnote" value={content.contact.formFootnote} onChange={(v) => update("contact", "formFootnote", v)} />

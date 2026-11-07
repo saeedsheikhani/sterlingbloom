@@ -3,7 +3,9 @@ import mongoose from "mongoose";
 const reviewSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, trim: true, maxlength: 120 },
-    email: { type: String, required: true, trim: true, lowercase: true, maxlength: 254 },
+    // Optional: reviews entered by an admin don't have an email.
+    email: { type: String, trim: true, lowercase: true, maxlength: 254, default: "" },
+    source: { type: String, enum: ["website", "admin"], default: "website" },
     event: { type: String, required: true, trim: true, maxlength: 100 },
     review: { type: String, required: true, trim: true, maxlength: 1500 },
     status: {
