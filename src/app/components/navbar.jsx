@@ -9,7 +9,7 @@ import { isCalendlyUrl, openCalendly } from "../../lib/calendly-popup";
 export default function Navbar({ content, preview = false }) {
   const pathname = usePathname();
   const navLinks = content.links.map(([name, href]) => ({ name, href }));
-  const consultationHref = content.ctaHref && content.ctaHref !== "#contact" ? content.ctaHref : "https://calendly.com/murtazasiddiqui250/30min";
+  const consultationHref = content.ctaHref && content.ctaHref !== "#contact" ? content.ctaHref : "https://calendly.com/sumaiya-sterlingbloomdecor/30min";
   const logoSettings = content.logoSettings || {};
   const mobileLogoSize = Math.max(32, Math.min(140, Number(logoSettings.mobileSize) || 76));
   const desktopLogoSize = Math.max(40, Math.min(180, Number(logoSettings.desktopSize) || 88));
@@ -96,7 +96,7 @@ export default function Navbar({ content, preview = false }) {
             <Link key={link.name} href={link.href} className="text-sm transition-colors hover:text-[#D6B56D]">{link.name}</Link>
           ))}
           {isCalendlyUrl(consultationHref) ? (
-            <button type="button" onClick={openCalendly} className="btn-primary ml-2 px-5 py-2.5">
+            <button type="button" onClick={(e) => openCalendly(e, consultationHref)} className="btn-primary ml-2 px-5 py-2.5">
               {content.cta}
             </button>
           ) : (
@@ -132,7 +132,7 @@ export default function Navbar({ content, preview = false }) {
             </Link>
           ))}
           {isCalendlyUrl(consultationHref) ? (
-            <button type="button" onClick={() => { setIsOpen(false); openCalendly(); }} className="btn-primary mt-1 w-full">
+            <button type="button" onClick={() => { setIsOpen(false); openCalendly(undefined, consultationHref); }} className="btn-primary mt-1 w-full">
               {content.cta}
             </button>
           ) : (

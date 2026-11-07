@@ -383,7 +383,8 @@ export default function ContentEditor({ initialContent }) {
         <Field label="Description" value={content.hero.description} onChange={(v) => update("hero", "description", v)} multiline />
         <div className="grid gap-5 sm:grid-cols-2">
           <MediaPicker label="Background Image" value={content.hero.backgroundImage} onChange={(v) => update("hero", "backgroundImage", v)} />
-          <Field label="Hero Video" value={content.hero.video} onChange={(v) => update("hero", "video", v)} />
+          <Field label="Hero Video" value={content.hero.video} onChange={(v) => update("hero", "video", v)} hint="Shown on tablets and computers." />
+          <Field label="Mobile Hero Video" value={content.hero.mobileVideo} onChange={(v) => update("hero", "mobileVideo", v)} hint="Vertical video shown on phones. Leave empty to use the default." />
         </div>
       </SectionCard>
 

@@ -19,7 +19,7 @@ export const defaultSiteContent = {
       ["Testimonials", "#testimonials"],
     ],
     cta: "Book Consultation",
-    ctaHref: "https://calendly.com/murtazasiddiqui250/30min",
+    ctaHref: "https://calendly.com/sumaiya-sterlingbloomdecor/30min",
     logoSettings: {
       visible: true,
       mobileSize: 76,
@@ -53,11 +53,12 @@ export const defaultSiteContent = {
     after: " With Intentional Design",
     description: "Custom event design and decor for weddings, corporate events, and private celebrations—thoughtfully styled to feel unforgettable.",
     primaryButton: "Book a Consultation",
-    primaryButtonHref: "https://calendly.com/murtazasiddiqui250/30min",
+    primaryButtonHref: "https://calendly.com/sumaiya-sterlingbloomdecor/30min",
     secondaryButton: "View Our Work",
     secondaryButtonHref: "#portfolio",
     backgroundImage: "/images/about.jpg",
     video: "/videos/hero.mp4",
+    mobileVideo: "https://res.cloudinary.com/xuv4gqwa/video/upload/v1794070444/sterling-bloom/bi5eczuoemda9ihrvuuh.mp4",
   },
   about: {
     eyebrow: "ABOUT STERLING BLOOM",

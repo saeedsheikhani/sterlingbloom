@@ -1,9 +1,9 @@
-export const CALENDLY_URL = "https://calendly.com/murtazasiddiqui250/30min";
+export const CALENDLY_URL = "https://calendly.com/sumaiya-sterlingbloomdecor/30min";
 const CALENDLY_SCRIPT = "https://assets.calendly.com/assets/external/widget.js";
 
 let calendlyPromise = null;
 
-function openCalendlyIframe() {
+function openCalendlyIframe(url) {
   const existing = document.getElementById("sterling-bloom-calendly-fallback");
   if (existing) return;
 
@@ -55,7 +55,7 @@ function openCalendlyIframe() {
   });
 
   const iframe = document.createElement("iframe");
-  iframe.src = CALENDLY_URL;
+  iframe.src = url;
   iframe.title = "Sterling Bloom consultation booking";
   iframe.setAttribute("frameborder", "0");
   iframe.setAttribute("allow", "payment");
@@ -133,7 +133,9 @@ function waitForCalendly(timeout = 8000) {
   return calendlyPromise;
 }
 
-export async function openCalendly(event) {
+// Pass the admin-saved booking link as `url`; falls back to the default link.
+export async function openCalendly(event, url) {
+  const bookingUrl = isCalendlyUrl(url) ? url : CALENDLY_URL;
   event?.preventDefault?.();
   event?.stopPropagation?.();
 
@@ -142,9 +144,9 @@ export async function openCalendly(event) {
   const Calendly = await waitForCalendly();
 
   if (Calendly?.initPopupWidget) {
-    Calendly.initPopupWidget({ url: CALENDLY_URL });
+    Calendly.initPopupWidget({ url: bookingUrl });
   } else {
-    openCalendlyIframe();
+    openCalendlyIframe(bookingUrl);
   }
 
   return false;

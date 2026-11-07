@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { isCalendlyUrl, openCalendly } from "../../lib/calendly-popup";
 
-const CALENDLY_URL = "https://calendly.com/murtazasiddiqui250/30min";
+const CALENDLY_URL = "https://calendly.com/sumaiya-sterlingbloomdecor/30min";
 
 export default function ThemeToggle() {
   const [dark, setDark] = useState(true);
