@@ -877,3 +877,22 @@ html[data-theme="dark"] .package-action:hover, html[data-theme="dark"] .package-
     transition: none !important;
   }
 }
+
+/* Hero eyebrow: solid white text with a soft shadow and thin gold border, readable over any video. */
+:root[data-site-theme] body .eyebrow.sb-hero-eyebrow,
+html[data-theme="dark"] body .eyebrow.sb-hero-eyebrow {
+  color: #fff !important;
+  border: 1px solid rgba(214, 181, 109, .85) !important;
+  background-color: rgba(20, 16, 12, .25) !important;
+  padding: .5rem .9rem;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .2em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .6), 0 0 10px rgba(0, 0, 0, .45);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+}
+@media (min-width: 640px) {
+  :root[data-site-theme] body .eyebrow.sb-hero-eyebrow,
+  html[data-theme="dark"] body .eyebrow.sb-hero-eyebrow { font-size: 13px; }
+}
