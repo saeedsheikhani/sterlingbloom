@@ -2,8 +2,7 @@
 
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { openCalendly } from "../../lib/calendly-popup";
-import { BOOKING_URL, INSTAGRAM_URL, SECTION_LINKS, WHATSAPP_URL } from "../../lib/site-links";
+import { INSTAGRAM_URL, SECTION_LINKS, WHATSAPP_URL } from "../../lib/site-links";
 
 function Icon({ type }) {
   const paths = {
@@ -31,23 +30,6 @@ export default function Footer({ content, contact, preview = false }) {
   return (
     <footer className="sb-footer bg-[#1D1813] text-white">
       <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10">
-        {/* Top band: closing line and the main booking action. */}
-        <div className="flex flex-col items-start gap-8 border-b border-white/10 py-14 lg:flex-row lg:items-end lg:justify-between lg:py-16">
-          <div className="max-w-2xl">
-            {hasText(content.eyebrow) && (
-              <p className="text-[10px] font-medium uppercase tracking-[0.28em] text-[#D6B56D]">{content.eyebrow}</p>
-            )}
-            <h2 className="mt-4 font-[family-name:var(--font-display)] text-[2.4rem] font-medium leading-[1.05] sm:text-5xl lg:text-6xl">
-              {content.heading}
-              <br />
-              <span className="text-[#D6B56D]">{content.highlight}</span>
-            </h2>
-          </div>
-          <button type="button" onClick={(event) => openCalendly(event, BOOKING_URL)} className="btn-primary w-full px-10 py-4 text-xs uppercase tracking-[0.18em] sm:w-auto">
-            Book Now
-          </button>
-        </div>
-
         {/* Columns: one column on phones, brand on top with two columns below on tablets, three columns on computers. */}
         <div className="grid grid-cols-1 gap-12 py-14 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1.2fr] lg:gap-16">
           <div className="md:col-span-2 lg:col-span-1">
@@ -58,8 +40,11 @@ export default function Footer({ content, contact, preview = false }) {
               height={635}
               className="h-auto w-36"
             />
-            {hasText(content.description) && (
-              <p className="mt-5 max-w-sm text-sm leading-7 text-white/60">{content.description}</p>
+            {(hasText(content.heading) || hasText(content.highlight)) && (
+              <p className="sb-footer-tagline mt-5 max-w-sm font-[family-name:var(--font-display)] text-lg leading-snug">
+                {content.heading}{" "}
+                <span className="sb-footer-tagline-accent">{content.highlight}</span>
+              </p>
             )}
             <div className="mt-6 flex items-center gap-3">
               <a href={instagramHref} target="_blank" rel="noopener noreferrer" aria-label={`Instagram (${instagramLabel})`} className="sb-footer-icon"><Icon type="instagram" /></a>

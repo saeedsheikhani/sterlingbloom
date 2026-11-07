@@ -163,11 +163,9 @@ export const defaultSiteContent = {
     formFootnote: "We’ll review your inquiry and follow up with next steps.",
   },
   footer: {
-    eyebrow: "Sterling Bloom",
     logo: "/images/sterling-bloom-logo.svg",
     heading: "Beautifully considered.",
     highlight: "Meaningfully remembered.",
-    description: "Thoughtfully designed celebrations, crafted with intention.",
     instagram: "@sterlingbloomdecor",
     instagramHref: "https://www.instagram.com/sterlingbloomdecor",
     facebook: "Facebook",

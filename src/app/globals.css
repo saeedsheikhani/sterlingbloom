@@ -921,7 +921,7 @@ html body #services .sb-service-dot-mark.is-active { background-color: #B68A35 !
 /* Process timeline: thin gold connecting line; circles cover the line with the section colour. */
 html body #process .sb-process-line { background-color: rgba(214, 181, 109, .55) !important; }
 html[data-theme] body #process li .sb-process-circle {
-  background-color: var(--sb-page-bg, #171614) !important;
+  background-color: var(--sb-section-bg, #171614) !important;
   transition: background-color .4s ease, color .4s ease, border-color .4s ease;
 }
 html[data-theme] body #process li:hover > .sb-process-circle { background-color: #B68A35 !important; border-color: #B68A35; color: #fff; }
@@ -950,3 +950,18 @@ html[data-theme="dark"] #investment h2, html[data-theme="dark"] #investment h3 {
 html[data-theme] body #testimonials .sb-google-rating { color: #D6B56D !important; }
 html[data-theme] body #testimonials .sb-google-link { color: #f4efe7 !important; }
 html[data-theme] body #testimonials .sb-google-review-link { color: #D6B56D !important; }
+
+/* Homepage sections alternate between the dark page colour and a slightly lighter dark tone,
+   so each section reads as separate. Hero and contact keep their own backgrounds.
+   nth-of-type follows the sections actually shown, so hiding one keeps the pattern. */
+html[data-theme="dark"] main > section:not(#home):not(#contact) {
+  --sb-section-bg: #171614;
+  background-color: var(--sb-section-bg) !important;
+}
+html[data-theme="dark"] main > section:nth-of-type(even):not(#home):not(#contact) {
+  --sb-section-bg: #1E1B18;
+}
+
+/* Footer tagline under the logo. */
+.sb-footer .sb-footer-tagline { color: rgba(244, 239, 231, .85); }
+.sb-footer .sb-footer-tagline-accent { color: #D6B56D; }

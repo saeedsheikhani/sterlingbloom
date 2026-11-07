@@ -2,13 +2,10 @@
 
 import { useState } from "react";
 
-const eventLabels = {
-  wedding: "Wedding",
-  nikah: "Nikah Ceremony",
-  mehndi: "Mehndi Event",
-  corporate: "Corporate Event",
-  private: "Private Celebration",
-};
+// Keep these in sync with the server list in src/app/api/inquiries/route.js.
+const EVENT_TYPES = ["Wedding", "Ceremony", "Nikah", "Mehndi", "Engagement", "Bridal Shower", "Other"];
+const ROLES = ["Couple", "Family Member", "Wedding Planner"];
+const BUDGETS = ["$5,000–$10,000", "$10,000–$20,000", "$20,000+", "Not sure yet, I'd like guidance"];
 
 export default function Contact({ content }) {
   const [status, setStatus] = useState("idle");
@@ -28,7 +25,7 @@ export default function Contact({ content }) {
     setStatus("loading");
     const form = pendingForm;
     const payload = Object.fromEntries(new FormData(form).entries());
-    const eventType = eventLabels[payload.event] || "Other";
+    const eventType = EVENT_TYPES.includes(payload.event) ? payload.event : "Other";
 
     try {
       const response = await fetch("/api/inquiries", {
@@ -53,6 +50,7 @@ export default function Contact({ content }) {
               subject: `New Sterling Bloom inquiry — ${eventType}`,
               from_name: "Sterling Bloom Website",
               replyto: payload.email,
+              role: payload.role,
               name: payload.name,
               email: payload.email,
               phone: payload.phone,
@@ -129,10 +127,17 @@ export default function Contact({ content }) {
                 </div>
               ))}
               <div>
+                <label htmlFor="role" className="mb-2 block text-[10px] font-medium uppercase tracking-[0.12em] text-gray-500 sm:text-xs">I am a</label>
+                <select id="role" name="role" defaultValue="" required className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3.5 text-sm text-gray-600 outline-none transition focus:border-[#B68A35] focus:ring-2 focus:ring-[#B68A35]/10">
+                  <option value="" disabled>Select one</option>
+                  {ROLES.map((role) => <option key={role} value={role}>{role}</option>)}
+                </select>
+              </div>
+              <div>
                 <label htmlFor="event" className="mb-2 block text-[10px] font-medium uppercase tracking-[0.12em] text-gray-500 sm:text-xs">Event Type</label>
                 <select id="event" name="event" defaultValue="" required className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3.5 text-sm text-gray-600 outline-none transition focus:border-[#B68A35] focus:ring-2 focus:ring-[#B68A35]/10">
                   <option value="" disabled>Select an event</option>
-                  <option value="wedding">Wedding</option><option value="nikah">Nikah</option><option value="mehndi">Mehndi</option><option value="corporate">Corporate Event</option><option value="private">Private Celebration</option>
+                  {EVENT_TYPES.map((type) => <option key={type} value={type}>{type}</option>)}
                 </select>
               </div>
               <div className="grid gap-5 sm:grid-cols-2">
@@ -150,13 +155,10 @@ export default function Contact({ content }) {
                 <input id="venue" name="venue" placeholder="Where will your event take place?" className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3.5 text-sm outline-none transition focus:border-[#B68A35] focus:ring-2 focus:ring-[#B68A35]/10" />
               </div>
               <div>
-                <label htmlFor="budget" className="mb-2 block text-[10px] font-medium uppercase tracking-[0.12em] text-gray-500 sm:text-xs">Estimated Budget <span className="normal-case tracking-normal">(optional)</span></label>
-                <select id="budget" name="budget" defaultValue="" className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3.5 text-sm text-gray-600 outline-none transition focus:border-[#B68A35] focus:ring-2 focus:ring-[#B68A35]/10">
-                  <option value="">Prefer not to say</option>
-                  <option value="$5,000–$10,000">$5,000–$10,000</option>
-                  <option value="$10,000–$20,000">$10,000–$20,000</option>
-                  <option value="$20,000+">$20,000+</option>
-                  <option value="Need guidance">Not sure yet, I'd like guidance</option>
+                <label htmlFor="budget" className="mb-2 block text-[10px] font-medium uppercase tracking-[0.12em] text-gray-500 sm:text-xs">Estimated Budget</label>
+                <select id="budget" name="budget" defaultValue="" required className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3.5 text-sm text-gray-600 outline-none transition focus:border-[#B68A35] focus:ring-2 focus:ring-[#B68A35]/10">
+                  <option value="" disabled>Select a budget</option>
+                  {BUDGETS.map((budget) => <option key={budget} value={budget}>{budget}</option>)}
                 </select>
               </div>
               <div>
