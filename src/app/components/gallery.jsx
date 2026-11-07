@@ -3,17 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { INSTAGRAM_URL } from "../../lib/site-links";
+import { getPortfolioTabs, resolveItemTab } from "../../lib/portfolio-tabs";
 
-// Filter tabs are fixed here; each portfolio item's admin "Category" must be one of these values.
-const CATEGORIES = [
-  { label: "All", value: "all" },
-  { label: "Weddings", value: "weddings" },
-  { label: "Ceremonies", value: "ceremonies" },
-  { label: "Mehndi", value: "mehndi" },
-];
-
-// Ignore capital letters and stray spaces in the admin "Category" field.
-const normalize = (value) => String(value ?? "").trim().toLowerCase();
 
 export default function Gallery({ content }) {
   const [activeCategory, setActiveCategory] = useState("all");
@@ -23,10 +14,14 @@ export default function Gallery({ content }) {
     typeof window !== "undefined" &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  const filteredGallery =
-    activeCategory === "all"
-      ? content.items
-      : content.items.filter((item) => normalize(item.category) === activeCategory);
+  // Tabs come from the admin panel; tabs with no items (or no name) are hidden.
+  const tabs = getPortfolioTabs(content).filter((tab) => String(tab.label ?? "").trim());
+  const items = content.items.map((item) => ({ ...item, tabId: resolveItemTab(item.category, tabs) }));
+  const usedTabs = tabs.filter((tab) => items.some((item) => item.tabId === tab.id));
+  const tabLabel = (id) => tabs.find((tab) => tab.id === id)?.label || "";
+  const currentTab = usedTabs.some((tab) => tab.id === activeCategory) ? activeCategory : "all";
+
+  const filteredGallery = currentTab === "all" ? items : items.filter((item) => item.tabId === currentTab);
 
   useEffect(() => {
     if (!gridRef.current || prefersReducedMotion()) return;
@@ -46,10 +41,10 @@ export default function Gallery({ content }) {
         stagger: { each: 0.075, from: "start" },
       },
     );
-  }, [activeCategory]);
+  }, [currentTab]);
 
   const changeCategory = (category) => {
-    if (category === activeCategory) return;
+    if (category === currentTab) return;
 
     if (!gridRef.current || prefersReducedMotion()) {
       setActiveCategory(category);
@@ -78,20 +73,24 @@ export default function Gallery({ content }) {
           <p className="section-copy mx-auto mt-5 max-w-2xl">{content.description}</p>
         </div>
 
-        <div className="mt-8 flex justify-center gap-5 pb-2 sm:mt-12 sm:gap-8">
-          {CATEGORIES.map((category) => (
+        {usedTabs.length > 0 && (
+        <div className="-mx-5 mt-8 overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:mt-12 sm:px-0 [&::-webkit-scrollbar]:hidden">
+          <div className="mx-auto flex w-max gap-5 pb-2 sm:gap-8">
+          {[{ id: "all", label: "All" }, ...usedTabs].map((category) => (
             <button
-              key={category.value}
+              key={category.id}
               type="button"
-              onClick={() => changeCategory(category.value)}
-              aria-pressed={activeCategory === category.value}
-              className={"relative shrink-0 whitespace-nowrap pb-3 text-[13px] transition-colors duration-300 sm:text-base " + (activeCategory === category.value ? "font-medium text-[#B68A35]" : "text-gray-500 hover:text-[#211d19]")}
+              onClick={() => changeCategory(category.id)}
+              aria-pressed={currentTab === category.id}
+              className={"relative shrink-0 whitespace-nowrap pb-3 text-[13px] transition-colors duration-300 sm:text-base " + (currentTab === category.id ? "font-medium text-[#B68A35]" : "text-gray-500 hover:text-[#211d19]")}
             >
               {category.label}
-              <span className={"absolute bottom-0 left-0 h-px bg-[#B68A35] transition-all duration-500 " + (activeCategory === category.value ? "w-full" : "w-0")} aria-hidden="true" />
+              <span className={"absolute bottom-0 left-0 h-px bg-[#B68A35] transition-all duration-500 " + (currentTab === category.id ? "w-full" : "w-0")} aria-hidden="true" />
             </button>
           ))}
+          </div>
         </div>
+        )}
 
         {/* Equal tiles: two per row on phones and tablets, three per row on computers. */}
         <div ref={gridRef} className="mt-8 grid grid-cols-2 gap-3 sm:mt-10 md:gap-5 lg:grid-cols-3">
@@ -101,7 +100,7 @@ export default function Gallery({ content }) {
                 <img src={item.image} alt={item.title} loading={index < 2 ? "eager" : "lazy"} className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.035]" />
                 <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/60 via-black/15 to-transparent" />
                 <div className="absolute inset-x-0 bottom-0 p-3 sm:p-5 md:p-6">
-                  <p className="text-[9px] font-medium uppercase tracking-[0.14em] text-white/75 sm:text-[10px] md:text-xs">{item.category}</p>
+                  <p className="text-[9px] font-medium uppercase tracking-[0.14em] text-white/75 sm:text-[10px] md:text-xs">{tabLabel(item.tabId)}</p>
                   <h3 className="mt-1 font-[family-name:var(--font-display)] text-[15px] font-medium leading-tight text-white sm:text-2xl md:text-3xl">{item.title}</h3>
                 </div>
               </div>
