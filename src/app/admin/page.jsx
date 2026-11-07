@@ -14,7 +14,7 @@ const modules = [
   },
   {
     title: "Website Content",
-    description: "Edit headings, copy, services, portfolio entries, packages, testimonials, and contact content without code.",
+    description: "Edit headings, copy, services, portfolio entries, investment, testimonials, and contact content without code.",
     status: "Live",
     href: "/admin/content",
   },

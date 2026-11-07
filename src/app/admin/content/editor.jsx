@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { getPortfolioTabs, newPortfolioTabId, resolveItemTab } from "../../../lib/portfolio-tabs";
+import { withInvestmentDefaults } from "../../../lib/investment-defaults";
 
 function Field({ label, value, onChange, multiline = false, hint, type = "text", min, max, step }) {
   const common = {
@@ -246,6 +247,12 @@ export default function ContentEditor({ initialContent }) {
     }));
   }
 
+  // Investment section: older saved content may not have it yet, so fill from defaults.
+  const investment = withInvestmentDefaults(content.investment);
+  function updateInvestment(key, value) {
+    setContent((current) => ({ ...current, investment: { ...withInvestmentDefaults(current.investment), [key]: value } }));
+  }
+
   // Portfolio tabs: stable ids, editable labels. Items store the tab id in `category`.
   function setPortfolioTabs(tabs) {
     update("gallery", "tabs", tabs);
@@ -318,8 +325,8 @@ export default function ContentEditor({ initialContent }) {
         <div className="grid gap-3 sm:grid-cols-2">
           {[
             ["hero", "Hero / Homepage banner"], ["about", "About"], ["services", "Services"],
-            ["gallery", "Portfolio / Gallery"], ["process", "Our Process"], ["packages", "Packages"],
-            ["testimonials", "Testimonials"], ["instagramStrip", "Instagram Feed"], ["calendly", "Book a Consultation"],
+            ["gallery", "Portfolio / Gallery"], ["process", "Our Process"], ["investment", "Investment"],
+            ["testimonials", "Testimonials"],
             ["contact", "Contact Form"], ["nav", "Navigation Bar"], ["footer", "Footer"],
           ].map(([key, label]) => (
             <ToggleField key={key} label={label} checked={content.visibility?.[key] ?? true} onChange={(value) => setContent((current) => ({ ...current, visibility: { ...(current.visibility || {}), [key]: value } }))} hint={content.visibility?.[key] === false ? "Hidden on the website" : "Visible on the website"} />
@@ -570,47 +577,23 @@ export default function ContentEditor({ initialContent }) {
         </div>
       </SectionCard>
 
-      <SectionCard eyebrow="PACKAGES" title="Packages" onReset={() => resetSection("packages")}>
+      <SectionCard eyebrow="INVESTMENT" title="Investment" onReset={() => resetSection("investment")}>
+        <p className="text-xs font-medium uppercase tracking-[0.14em] text-gray-500">Custom pricing</p>
         <div className="grid gap-5 sm:grid-cols-2">
-          <Field label="Eyebrow" value={content.packages.eyebrow} onChange={(v) => update("packages", "eyebrow", v)} />
-          <Field label="Heading" value={content.packages.heading} onChange={(v) => update("packages", "heading", v)} />
-          <Field label="Button" value={content.packages.button} onChange={(v) => update("packages", "button", v)} />
-          <Field label="Featured Label" value={content.packages.featuredLabel} onChange={(v) => update("packages", "featuredLabel", v)} />
+          <Field label="Eyebrow" value={investment.eyebrow} onChange={(v) => updateInvestment("eyebrow", v)} />
+          <Field label="Button" value={investment.button} onChange={(v) => updateInvestment("button", v)} hint="Opens the Calendly booking popup." />
         </div>
-        <Field label="Description" value={content.packages.description} onChange={(v) => update("packages", "description", v)} multiline />
-        <Field label="Pricing Note" value={content.packages.note} onChange={(v) => update("packages", "note", v)} multiline />
-        <div className="space-y-4">
-          {content.packages.items.map((item, index) => (
-            <div key={index} className="rounded-2xl border border-gray-200 bg-[#FBFAF7] p-5">
-              <div className="mb-4 flex items-center justify-between">
-                <p className="text-xs font-medium uppercase tracking-[0.14em] text-gray-500">Package {String(index + 1).padStart(2, "0")}</p>
-                <button type="button" onClick={() => removeItem("packages", "items", index)} className="text-xs text-gray-400 hover:text-red-600">Remove</button>
-              </div>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <Field label="Name" value={item.name} onChange={(v) => updateArray("packages", "items", index, "name", v)} />
-                <label className="flex items-end gap-3 pb-1 text-sm"><input type="checkbox" checked={!!item.featured} onChange={(e) => updateArray("packages", "items", index, "featured", e.target.checked)} /> Featured package</label>
-              </div>
-              <div className="mt-4"><Field label="Description" value={item.description} onChange={(v) => updateArray("packages", "items", index, "description", v)} multiline /></div>
-              <div className="mt-4">
-                <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-gray-500">Features</p>
-                <div className="mt-3 space-y-2">
-                  {item.features.map((feature, featureIndex) => (
-                    <div key={featureIndex} className="flex gap-2">
-                      <input value={feature} onChange={(e) => {
-                        const features = [...item.features];
-                        features[featureIndex] = e.target.value;
-                        updateArray("packages", "items", index, "features", features);
-                      }} className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm outline-none focus:border-[#B68A35]" />
-                      <button type="button" onClick={() => updateArray("packages", "items", index, "features", item.features.filter((_, i) => i !== featureIndex))} className="rounded-xl border px-3 text-xs text-gray-500">×</button>
-                    </div>
-                  ))}
-                </div>
-                <button type="button" onClick={() => updateArray("packages", "items", index, "features", [...item.features, "New feature"])} className="mt-3 text-xs text-[#B68A35]">+ Add feature</button>
-              </div>
-            </div>
-          ))}
-          <button type="button" onClick={() => addItem("packages", "items", { name: "New Package", description: "", features: [], featured: false })} className="text-xs font-medium uppercase tracking-[0.12em] text-[#B68A35]">+ Add package</button>
+        <Field label="Heading" value={investment.heading} onChange={(v) => updateInvestment("heading", v)} />
+        <Field label="Text" value={investment.description} onChange={(v) => updateInvestment("description", v)} multiline />
+        <p className="pt-2 text-xs font-medium uppercase tracking-[0.14em] text-gray-500">For planners panel</p>
+        <div className="grid gap-5 sm:grid-cols-2">
+          <Field label="Small Label" value={investment.plannerLabel} onChange={(v) => updateInvestment("plannerLabel", v)} />
+          <Field label="Button" value={investment.plannerButton} onChange={(v) => updateInvestment("plannerButton", v)} />
+          <Field label="Button Email" value={investment.plannerEmail} onChange={(v) => updateInvestment("plannerEmail", v)} hint="The button opens a new email to this address." />
+          <Field label="Email Subject" value={investment.plannerSubject} onChange={(v) => updateInvestment("plannerSubject", v)} />
         </div>
+        <Field label="Heading" value={investment.plannerHeading} onChange={(v) => updateInvestment("plannerHeading", v)} />
+        <Field label="Text" value={investment.plannerDescription} onChange={(v) => updateInvestment("plannerDescription", v)} multiline />
       </SectionCard>
 
       <SectionCard eyebrow="FAQS" title="Frequently Asked Questions" onReset={() => resetSection("faq")}>
@@ -640,6 +623,13 @@ export default function ContentEditor({ initialContent }) {
           <Field label="Launch Note" value={content.testimonials.note} onChange={(v) => update("testimonials", "note", v)} multiline />
         </div>
         <Field label="Description" value={content.testimonials.description} onChange={(v) => update("testimonials", "description", v)} multiline />
+        <div className="grid gap-5 sm:grid-cols-3">
+          <Field label="Google Rating" value={content.testimonials.googleRating ?? "5.0"} onChange={(v) => update("testimonials", "googleRating", v)} hint="Shown as \u201c5.0 \u2605 on Google\u201d." />
+          <Field label="Google Link Text" value={content.testimonials.googleLinkText ?? "Read Our Reviews on Google"} onChange={(v) => update("testimonials", "googleLinkText", v)} />
+          <Field label="Google Reviews Link" value={content.testimonials.googleUrl ?? "https://share.google/rmH7zZms0fO6ToQA5"} onChange={(v) => update("testimonials", "googleUrl", v)} hint="Used by both Google links." />
+          <Field label="Leave a Review Link Text" value={content.testimonials.googleReviewText ?? "Leave Us a Google Review"} onChange={(v) => update("testimonials", "googleReviewText", v)} />
+        </div>
+        <p className="text-[11px] leading-5 text-gray-400">The Testimonials section only appears on the website once at least 2 reviews are approved (Admin \u2192 Reviews).</p>
         <div className="space-y-4">
           {content.testimonials.items.map((item, index) => (
             <div key={index} className="rounded-2xl border border-gray-200 bg-[#FBFAF7] p-5">
@@ -656,43 +646,6 @@ export default function ContentEditor({ initialContent }) {
           ))}
           <button type="button" onClick={() => addItem("testimonials", "items", { name: "New Client", event: "Event", review: "" })} className="text-xs font-medium uppercase tracking-[0.12em] text-[#B68A35]">+ Add client story</button>
         </div>
-      </SectionCard>
-
-      <SectionCard eyebrow="INSTAGRAM" title="Instagram Strip" onReset={() => resetSection("instagramStrip")}>
-        <div className="grid gap-5 sm:grid-cols-2">
-          <Field label="Eyebrow" value={content.instagramStrip.eyebrow} onChange={(v) => update("instagramStrip", "eyebrow", v)} />
-          <Field label="Handle / Label" value={content.instagramStrip.handle} onChange={(v) => update("instagramStrip", "handle", v)} hint="Use the public Instagram handle, e.g. @sterlingbloomdecor." />
-          <Field label="Heading" value={content.instagramStrip.heading} onChange={(v) => update("instagramStrip", "heading", v)} />
-          <Field label="Instagram URL" value={content.instagramStrip.url} onChange={(v) => update("instagramStrip", "url", v)} hint="Public profile URL, e.g. https://instagram.com/yourhandle" />
-          <Field label="Button" value={content.instagramStrip.button} onChange={(v) => update("instagramStrip", "button", v)} />
-        </div>
-        <Field label="Description" value={content.instagramStrip.description} onChange={(v) => update("instagramStrip", "description", v)} multiline />
-        <div className="space-y-4">
-          {content.instagramStrip.items.map((item, index) => (
-            <div key={index} className="rounded-2xl border border-gray-200 bg-[#FBFAF7] p-5">
-              <div className="mb-4 flex items-center justify-between">
-                <p className="text-xs font-medium uppercase tracking-[0.14em] text-gray-500">Instagram Image {String(index + 1).padStart(2, "0")}</p>
-                <button type="button" onClick={() => removeItem("instagramStrip", "items", index)} className="text-xs text-gray-400 hover:text-red-600">Remove</button>
-              </div>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <MediaPicker label="Image" value={item.image} onChange={(v) => updateArray("instagramStrip", "items", index, "image", v)} />
-                <Field label="Alt Text" value={item.alt} onChange={(v) => updateArray("instagramStrip", "items", index, "alt", v)} />
-              </div>
-            </div>
-          ))}
-          <button type="button" onClick={() => addItem("instagramStrip", "items", { image: "", alt: "Sterling Bloom event" })} className="text-xs font-medium uppercase tracking-[0.12em] text-[#B68A35]">+ Add Instagram image</button>
-        </div>
-      </SectionCard>
-
-      <SectionCard eyebrow="CONSULTATION" title="Calendly Booking" onReset={() => resetSection("consultation")}>
-        <div className="grid gap-5 sm:grid-cols-2">
-          <Field label="Eyebrow" value={content.calendly.eyebrow} onChange={(v) => update("calendly", "eyebrow", v)} />
-          <Field label="Heading" value={content.calendly.heading} onChange={(v) => update("calendly", "heading", v)} />
-        </div>
-        <Field label="Description" value={content.calendly.description} onChange={(v) => update("calendly", "description", v)} multiline />
-        <p className="rounded-xl border border-[#D6B56D]/40 bg-[#FBF7ED] px-4 py-3 text-xs leading-5 text-gray-600">
-          Calendly authentication stays server-side. The public booking page is loaded from your Calendly account after the Vercel environment variable is configured.
-        </p>
       </SectionCard>
 
       <SectionCard eyebrow="CONTACT" title="Contact & Inquiry" onReset={() => resetSection("contact")}>

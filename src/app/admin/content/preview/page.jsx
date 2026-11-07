@@ -8,11 +8,9 @@ import About from "../../../components/about";
 import Services from "../../../components/services";
 import Gallery from "../../../components/gallery";
 import Process from "../../../components/process";
-import Packages from "../../../components/packages";
+import Investment from "../../../components/investment";
 import TestimonialsPreview from "../../../components/testimonials-preview";
-import InstagramStrip from "../../../components/instagram-strip";
 import Contact from "../../../components/contact";
-import CalendlyBooking from "../../../components/calendly-booking";
 
 export default function ContentPreviewPage() {
   const [content, setContent] = useState(null);
@@ -39,7 +37,7 @@ export default function ContentPreviewPage() {
     "--sb-accent": colors.accent || "#B68A35",
     "--sb-accent-light": colors.accentLight || "#D6B56D",
     "--sb-content-width": String(layout.contentWidth || 1280) + "px",
-    "--sb-section-spacing": String(layout.sectionSpacing || 80) + "px",
+    "--sb-section-spacing": String(layout.sectionSpacing || 56) + "px",
     "--sb-card-radius": String(layout.cardRadius ?? 20) + "px",
     "--sb-card-padding": String(layout.cardPadding ?? 24) + "px",
   };
@@ -53,10 +51,8 @@ export default function ContentPreviewPage() {
       {visible("services") && <Services content={content.services} />}
       {visible("gallery") && <Gallery content={content.gallery} />}
       {visible("process") && <Process content={content.process} />}
-      {visible("packages") && <Packages content={content.packages} />}
+      {visible("investment") && <Investment content={content.investment} />}
       {visible("testimonials") && <TestimonialsPreview content={content.testimonials} />}
-      {visible("instagramStrip") && <InstagramStrip content={content.instagramStrip} />}
-      {visible("calendly") && <CalendlyBooking content={content.calendly} />}
       {visible("contact") && <Contact content={content.contact} />}
     </main>
     {visible("footer") && <Footer content={content.footer} contact={content.contact} preview />}

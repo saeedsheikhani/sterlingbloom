@@ -1,11 +1,12 @@
 import connectDB from "./mongodb";
 import SiteContent from "../models/SiteContent";
 import { DEFAULT_PORTFOLIO_TABS } from "./portfolio-tabs";
+import { INVESTMENT_DEFAULTS } from "./investment-defaults";
 
 export const defaultSiteContent = {
   visibility: {
     hero: true, about: true, services: true, gallery: true, process: true,
-    packages: true, testimonials: true, instagramStrip: true, calendly: true,
+    investment: true, testimonials: true,
     contact: true, nav: true, footer: true, faq: true,
   },
   nav: {
@@ -16,7 +17,7 @@ export const defaultSiteContent = {
       ["Services", "#services"],
       ["Portfolio", "#portfolio"],
       ["Process", "#process"],
-      ["Packages", "#packages"],
+      ["Investment", "#investment"],
       ["Testimonials", "#testimonials"],
     ],
     cta: "Book Consultation",
@@ -112,19 +113,8 @@ export const defaultSiteContent = {
       },
     ],
   },
-  packages: {
-    eyebrow: "PACKAGES",
-    heading: "Choose Your Experience",
-    description: "Thoughtfully designed experiences that can be tailored to the style, scale, and vision of your event.",
-    items: [
-      { name: "Bronze", description: "Perfect for intimate celebrations with elegant styling and thoughtful details.", features: ["Event styling", "Basic floral arrangements", "Table styling"], featured: false },
-      { name: "Silver", description: "A refined experience combining thoughtful design with elevated event styling.", features: ["Complete event styling", "Premium floral arrangements", "Customized decor", "Table styling"], featured: true },
-      { name: "Gold", description: "Our complete experience for celebrations where every detail deserves attention.", features: ["Full event design", "Premium floral styling", "Customized decor", "Venue transformation", "Dedicated planning support"], featured: false },
-    ],
-    note: "Every celebration is different. Final pricing is tailored to your event requirements, guest count, venue, and design scope.",
-    button: "Request Pricing",
-    featuredLabel: "Most Popular",
-  },
+  investment: INVESTMENT_DEFAULTS,
+
   faq: {
     eyebrow: "GOOD TO KNOW",
     heading: "Frequently Asked Questions",
@@ -148,28 +138,13 @@ export const defaultSiteContent = {
     ],
     label: "Client Story",
     note: "Client stories shown here are sample presentation content and should be replaced with verified feedback before launch.",
+    googleRating: "5.0",
+    googleLinkText: "Read Our Reviews on Google",
+    googleUrl: "https://share.google/rmH7zZms0fO6ToQA5",
+    googleReviewText: "Leave Us a Google Review",
   },
-  instagramStrip: {
-    eyebrow: "FOLLOW ALONG",
-    heading: "Moments From Sterling Bloom",
-    description: "A glimpse behind the celebrations, details, and spaces we create.",
-    handle: "@sterlingbloomdecor",
-    url: "https://www.instagram.com/sterlingbloomdecor",
-    button: "Follow on Instagram",
-    items: [
-      { image: "/images/gallery/wedding-1.jpg", alt: "Sterling Bloom wedding decor" },
-      { image: "/images/gallery/wedding-2.jpg", alt: "Sterling Bloom wedding styling" },
-      { image: "/images/gallery/nikah-1.jpg", alt: "Sterling Bloom Nikah decor" },
-      { image: "/images/gallery/mehndi-1.jpg", alt: "Sterling Bloom Mehndi decor" },
-      { image: "/images/gallery/corporate-1.jpg", alt: "Sterling Bloom corporate event" },
-      { image: "/images/gallery/wedding-3.jpg", alt: "Sterling Bloom reception decor" },
-    ],
-  },
-  calendly: {
-    eyebrow: "BOOK A CONSULTATION",
-    heading: "Choose a Time That Works For You",
-    description: "Prefer to speak with us directly? Pick a convenient consultation time and let’s start planning your celebration.",
-  },
+
+
   contact: {
     eyebrow: "LET'S CREATE TOGETHER",
     heading: "Let's Create Something",

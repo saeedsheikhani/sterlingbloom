@@ -931,3 +931,22 @@ html[data-theme] body #process li:hover > .sb-process-circle { background-color:
   main section .eyebrow + .h-px { margin-top: .75rem !important; margin-bottom: 0 !important; }
   main section .eyebrow + .h-px + h2 { margin-top: .75rem !important; }
 }
+
+/* Investment section: planner panel and gold outline button. */
+html[data-theme] body #investment .sb-planner-panel { background-color: var(--sb-surface, #201e1b) !important; }
+html[data-theme] body #investment .sb-outline-btn {
+  border: 1px solid #D6B56D;
+  background-color: transparent !important;
+  color: #D6B56D !important;
+  transition: background-color .25s ease, color .25s ease, border-color .25s ease;
+}
+html[data-theme] body #investment .sb-outline-btn:hover,
+html[data-theme] body #investment .sb-outline-btn:focus-visible { background-color: #B68A35 !important; border-color: #B68A35; color: #fff !important; }
+html[data-theme] body #investment .sb-planner-label { color: #D6B56D !important; }
+html[data-theme="dark"] #investment { background-color: var(--sb-page-bg, #171614) !important; }
+html[data-theme="dark"] #investment h2, html[data-theme="dark"] #investment h3 { color: #f4efe7 !important; }
+
+/* Testimonials: Google rating line. */
+html[data-theme] body #testimonials .sb-google-rating { color: #D6B56D !important; }
+html[data-theme] body #testimonials .sb-google-link { color: #f4efe7 !important; }
+html[data-theme] body #testimonials .sb-google-review-link { color: #D6B56D !important; }

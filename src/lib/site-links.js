@@ -3,7 +3,7 @@ export const SECTION_LINKS = [
   ["About", "#about"],
   ["Services", "#services"],
   ["Portfolio", "#portfolio"],
-  ["Packages", "#packages"],
+  ["Investment", "#investment"],
   ["FAQ", "#faq"],
   ["Contact", "#contact"],
 ];
