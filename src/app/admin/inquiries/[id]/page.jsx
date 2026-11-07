@@ -62,6 +62,7 @@ export default async function AdminInquiryDetail({ params }) {
             <dl className="mt-6 space-y-5">
               <div><dt className="text-[10px] uppercase tracking-[0.12em] text-gray-400">Email</dt><dd className="mt-1 break-all text-sm"><a href={"mailto:" + inquiry.email} className="underline decoration-[#D6B56D] underline-offset-4 hover:text-[#8C6824]">{inquiry.email}</a></dd></div>
               <div><dt className="text-[10px] uppercase tracking-[0.12em] text-gray-400">Phone</dt><dd className="mt-1 text-sm"><a href={"tel:" + String(inquiry.phone || "").replace(/[^+\d]/g, "")} className="underline decoration-[#D6B56D] underline-offset-4 hover:text-[#8C6824]">{inquiry.phone}</a></dd></div>
+              <div><dt className="text-[10px] uppercase tracking-[0.12em] text-gray-400">I am a</dt><dd className="mt-1 text-sm">{inquiry.role || "Not provided"}</dd></div>
               <div><dt className="text-[10px] uppercase tracking-[0.12em] text-gray-400">Event</dt><dd className="mt-1 text-sm">{inquiry.eventType}</dd></div>
               <div><dt className="text-[10px] uppercase tracking-[0.12em] text-gray-400">Event date</dt><dd className="mt-1 text-sm">{inquiry.eventDate || "Not provided"}</dd></div>
               <div><dt className="text-[10px] uppercase tracking-[0.12em] text-gray-400">Venue / city</dt><dd className="mt-1 text-sm">{inquiry.venue || "Not provided"}</dd></div>

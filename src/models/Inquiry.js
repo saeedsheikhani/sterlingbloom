@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const inquirySchema = new mongoose.Schema(
   {
+    role: { type: String, trim: true, maxlength: 40 },
     name: { type: String, required: true, trim: true, maxlength: 120 },
     email: { type: String, required: true, trim: true, lowercase: true, maxlength: 254 },
     phone: { type: String, required: true, trim: true, maxlength: 40 },

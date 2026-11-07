@@ -118,6 +118,7 @@ export default async function AdminInquiriesPage({ searchParams }) {
                     <p className="mt-1 truncate text-xs text-gray-500">{inquiry.email}</p>
                   </div>
                   <div className="text-sm text-gray-600">{inquiry.eventType}</div>
+                  {inquiry.role && <div className="text-xs text-gray-400">{inquiry.role}</div>}
                   <div className="text-xs leading-5 text-gray-500">{formatDate(inquiry.createdAt)}</div>
                   <div>
                     <span className={`inline-flex rounded-full border px-3 py-1 text-[9px] font-medium uppercase tracking-[0.12em] ${statusStyles[inquiry.status] || statusStyles.new}`}>

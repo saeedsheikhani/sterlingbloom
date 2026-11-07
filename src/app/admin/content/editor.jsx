@@ -670,16 +670,14 @@ export default function ContentEditor({ initialContent }) {
 
       <SectionCard eyebrow="FOOTER" title="Footer" onReset={() => resetSection("footer")}>
         <div className="grid gap-5 sm:grid-cols-2">
-          <Field label="Eyebrow" value={content.footer.eyebrow} onChange={(v) => update("footer", "eyebrow", v)} />
           <Field label="Closing Line" value={content.footer.closing} onChange={(v) => update("footer", "closing", v)} />
-          <Field label="Heading" value={content.footer.heading} onChange={(v) => update("footer", "heading", v)} />
-          <Field label="Highlighted Heading" value={content.footer.highlight} onChange={(v) => update("footer", "highlight", v)} />
+          <Field label="Tagline (first part)" value={content.footer.heading} onChange={(v) => update("footer", "heading", v)} hint="Shown under the footer logo." />
+          <Field label="Tagline (gold part)" value={content.footer.highlight} onChange={(v) => update("footer", "highlight", v)} />
           <Field label="Instagram Label" value={content.footer.instagram} onChange={(v) => update("footer", "instagram", v)} />
           <Field label="Instagram URL" value={content.footer.instagramHref} onChange={(v) => update("footer", "instagramHref", v)} hint="Full URL, for example https://instagram.com/yourhandle" />
           <Field label="Facebook Label" value={content.footer.facebook} onChange={(v) => update("footer", "facebook", v)} />
           <Field label="Facebook URL" value={content.footer.facebookHref} onChange={(v) => update("footer", "facebookHref", v)} hint="Full URL, for example https://facebook.com/yourpage" />
         </div>
-        <Field label="Description" value={content.footer.description} onChange={(v) => update("footer", "description", v)} multiline />
       </SectionCard>
 
       </div>
