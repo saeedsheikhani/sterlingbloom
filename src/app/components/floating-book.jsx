@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { openCalendly } from "../../lib/calendly-popup";
 
-// Floating "Book a meeting" button. The site is dark-only, so there is no light/dark toggle.
+// Floating "Book Now" button. The site is dark-only, so there is no light/dark toggle.
 // It hides while the hero is on screen, because the hero has its own Book button.
 export default function FloatingBook() {
   const [heroVisible, setHeroVisible] = useState(false);
@@ -18,8 +18,8 @@ export default function FloatingBook() {
 
   return (
     <div className={"sb-floating-actions" + (heroVisible ? " is-hidden" : "")} aria-label="Booking">
-      <button type="button" onClick={openCalendly} className="sb-floating-book" aria-label="Book a meeting" tabIndex={heroVisible ? -1 : 0}>
-        Book a meeting
+      <button type="button" onClick={openCalendly} className="sb-floating-book" aria-label="Book Now" tabIndex={heroVisible ? -1 : 0}>
+        Book Now
       </button>
     </div>
   );

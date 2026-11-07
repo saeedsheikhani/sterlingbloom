@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Navbar from "../../../components/navbar";
 import Footer from "../../../components/footer";
 import Hero from "../../../components/hero";
@@ -11,6 +11,8 @@ import Process from "../../../components/process";
 import Investment from "../../../components/investment";
 import TestimonialsPreview from "../../../components/testimonials-preview";
 import Contact from "../../../components/contact";
+import FAQ from "../../../components/faq";
+import { getSectionOrder } from "../../../../lib/section-order";
 
 export default function ContentPreviewPage() {
   const [content, setContent] = useState(null);
@@ -42,18 +44,22 @@ export default function ContentPreviewPage() {
     "--sb-card-padding": String(layout.cardPadding ?? 24) + "px",
   };
   const visible = (key) => content.visibility?.[key] !== false;
+  const sections = {
+    about: <About content={content.about} />,
+    services: <Services content={content.services} />,
+    gallery: <Gallery content={content.gallery} />,
+    process: <Process content={content.process} />,
+    investment: <Investment content={content.investment} />,
+    testimonials: <TestimonialsPreview content={content.testimonials} />,
+    faq: <FAQ content={content.faq || {}} />,
+    contact: <Contact content={content.contact} />,
+  };
   return <div style={style} className="sb-preview min-h-screen overflow-x-hidden bg-[var(--sb-page-bg)] text-[var(--sb-text)]">
     {visible("nav") && <Navbar content={content.nav} preview />}
     <div className="relative z-10 border-b border-black/10 bg-white/95 px-4 py-2 text-center text-[10px] font-semibold uppercase tracking-[.16em] text-[#8A682A]">Live draft preview · Not published</div>
     <main>
       {visible("hero") && <Hero content={content.hero} />}
-      {visible("about") && <About content={content.about} />}
-      {visible("services") && <Services content={content.services} />}
-      {visible("gallery") && <Gallery content={content.gallery} />}
-      {visible("process") && <Process content={content.process} />}
-      {visible("investment") && <Investment content={content.investment} />}
-      {visible("testimonials") && <TestimonialsPreview content={content.testimonials} />}
-      {visible("contact") && <Contact content={content.contact} />}
+      {getSectionOrder(content).filter(visible).map((key) => <Fragment key={key}>{sections[key]}</Fragment>)}
     </main>
     {visible("footer") && <Footer content={content.footer} contact={content.contact} preview />}
   </div>;

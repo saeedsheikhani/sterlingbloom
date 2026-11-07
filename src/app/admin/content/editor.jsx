@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { getPortfolioTabs, newPortfolioTabId, resolveItemTab } from "../../../lib/portfolio-tabs";
 import { withInvestmentDefaults } from "../../../lib/investment-defaults";
+import { getSectionOrder, SECTION_LABELS } from "../../../lib/section-order";
 
 function Field({ label, value, onChange, multiline = false, hint, type = "text", min, max, step }) {
   const common = {
@@ -247,6 +248,21 @@ export default function ContentEditor({ initialContent }) {
     }));
   }
 
+  // Page Sections: show/hide and reorder the homepage sections.
+  function setVisibility(key, value) {
+    setContent((current) => ({ ...current, visibility: { ...(current.visibility || {}), [key]: value } }));
+  }
+
+  function moveSection(index, direction) {
+    setContent((current) => {
+      const order = getSectionOrder(current);
+      const target = index + direction;
+      if (target < 0 || target >= order.length) return current;
+      [order[index], order[target]] = [order[target], order[index]];
+      return { ...current, sectionOrder: order };
+    });
+  }
+
   // Investment section: older saved content may not have it yet, so fill from defaults.
   const investment = withInvestmentDefaults(content.investment);
   function updateInvestment(key, value) {
@@ -320,16 +336,26 @@ export default function ContentEditor({ initialContent }) {
         <p className="mt-3 text-[11px] leading-5 text-gray-400">Changes are only a draft until you press Save Website Content. Scroll inside the preview to inspect the whole page.</p>
       </aside>
       <div className="min-w-0 space-y-6">
-      <SectionCard eyebrow="PAGE BUILDER" title="Section Visibility">
-        <p className="text-sm leading-6 text-gray-500">Choose which parts of the public website are displayed. Hidden sections stay saved and can be turned back on any time.</p>
+      <SectionCard eyebrow="PAGE BUILDER" title="Page Sections">
+        <p className="text-sm leading-6 text-gray-500">Use the arrows to change the order of the homepage sections, and the tick box to show or hide each one. Hidden sections stay saved and can be turned back on any time. Changes go live when you save.</p>
+        <ol className="space-y-2">
+          <li className="flex items-center gap-3 rounded-xl border border-dashed border-gray-200 bg-white/60 px-4 py-3 text-sm text-gray-500">
+            <input type="checkbox" checked={content.visibility?.hero ?? true} onChange={(event) => setVisibility("hero", event.target.checked)} className="h-4 w-4 accent-[#B68A35]" aria-label="Show Hero" />
+            <span className="flex-1">Hero / Homepage banner <span className="text-[11px]">(always first)</span></span>
+          </li>
+          {getSectionOrder(content).map((key, index, order) => (
+            <li key={key} className="flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3">
+              <input type="checkbox" checked={content.visibility?.[key] ?? true} onChange={(event) => setVisibility(key, event.target.checked)} className="h-4 w-4 accent-[#B68A35]" aria-label={"Show " + SECTION_LABELS[key]} />
+              <span className="w-6 text-xs text-gray-400">{index + 1}</span>
+              <span className={"flex-1 text-sm " + (content.visibility?.[key] === false ? "text-gray-400 line-through" : "text-[#211d19]")}>{SECTION_LABELS[key]}</span>
+              <button type="button" onClick={() => moveSection(index, -1)} disabled={index === 0} aria-label={"Move " + SECTION_LABELS[key] + " up"} className="h-9 w-9 rounded-lg border border-gray-200 text-gray-500 hover:border-[#B68A35] hover:text-[#B68A35] disabled:opacity-30">↑</button>
+              <button type="button" onClick={() => moveSection(index, 1)} disabled={index === order.length - 1} aria-label={"Move " + SECTION_LABELS[key] + " down"} className="h-9 w-9 rounded-lg border border-gray-200 text-gray-500 hover:border-[#B68A35] hover:text-[#B68A35] disabled:opacity-30">↓</button>
+            </li>
+          ))}
+        </ol>
         <div className="grid gap-3 sm:grid-cols-2">
-          {[
-            ["hero", "Hero / Homepage banner"], ["about", "About"], ["services", "Services"],
-            ["gallery", "Portfolio / Gallery"], ["process", "Our Process"], ["investment", "Investment"],
-            ["testimonials", "Testimonials"],
-            ["contact", "Contact Form"], ["nav", "Navigation Bar"], ["footer", "Footer"],
-          ].map(([key, label]) => (
-            <ToggleField key={key} label={label} checked={content.visibility?.[key] ?? true} onChange={(value) => setContent((current) => ({ ...current, visibility: { ...(current.visibility || {}), [key]: value } }))} hint={content.visibility?.[key] === false ? "Hidden on the website" : "Visible on the website"} />
+          {[["nav", "Navigation Bar"], ["footer", "Footer"]].map(([key, label]) => (
+            <ToggleField key={key} label={label} checked={content.visibility?.[key] ?? true} onChange={(value) => setVisibility(key, value)} hint={content.visibility?.[key] === false ? "Hidden on the website" : "Visible on the website"} />
           ))}
         </div>
       </SectionCard>
