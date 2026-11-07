@@ -347,7 +347,7 @@ export default function ContentEditor({ initialContent }) {
         </div>
         <div className="mt-6 grid gap-5 sm:grid-cols-2">
           <Field label="Content Width (px)" type="number" min={720} max={1800} step={1} value={content.design?.layout?.contentWidth ?? 1280} onChange={(v) => updateDesign("layout", "contentWidth", Math.max(720, Math.min(1800, Number(v) || 1280)))} hint="Range: 720–1800px." />
-          <Field label="Section Spacing (px)" type="number" min={24} max={180} step={1} value={content.design?.layout?.sectionSpacing ?? 80} onChange={(v) => updateDesign("layout", "sectionSpacing", Math.max(24, Math.min(180, Number(v) || 80)))} hint="Shared spacing scale: 24–180px." />
+          <Field label="Section Spacing (px)" type="number" min={24} max={180} step={1} value={content.design?.layout?.sectionSpacing ?? 56} onChange={(v) => updateDesign("layout", "sectionSpacing", Math.max(24, Math.min(180, Number(v) || 56)))} hint="Space above and below each section on tablets and computers (24–180px). Recommended: 56." />
           <Field label="Card Corner Radius (px)" type="number" min={0} max={48} step={1} value={content.design?.layout?.cardRadius ?? 20} onChange={(v) => updateDesign("layout", "cardRadius", Math.max(0, Math.min(48, Number(v) || 0)))} hint="Use 0 for sharp corners." />
           <Field label="Card Padding (px)" type="number" min={8} max={64} step={1} value={content.design?.layout?.cardPadding ?? 24} onChange={(v) => updateDesign("layout", "cardPadding", Math.max(8, Math.min(64, Number(v) || 24)))} hint="Spacing token for components wired to the design system." />
         </div>

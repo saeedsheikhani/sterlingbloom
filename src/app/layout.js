@@ -61,7 +61,7 @@ export default async function RootLayout({ children }) {
     "--sb-accent-light": colors.accentLight || "#D6B56D",
     "--sb-dark": colors.dark || "#1D1813",
     "--sb-content-width": String(layout.contentWidth || 1280) + "px",
-    "--sb-section-spacing": String(layout.sectionSpacing || 80) + "px",
+    "--sb-section-spacing": String(layout.sectionSpacing || 56) + "px",
     "--sb-card-radius": String(layout.cardRadius ?? 20) + "px",
     "--sb-card-padding": String(layout.cardPadding || 24) + "px",
   };

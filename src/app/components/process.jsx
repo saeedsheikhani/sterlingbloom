@@ -1,4 +1,6 @@
 export default function Process({ content }) {
+  const steps = content.steps || [];
+
   return (
     <section data-reveal id="process" className="bg-[#F8F7F4] py-14 sm:py-18 lg:py-20">
       <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
@@ -9,20 +11,38 @@ export default function Process({ content }) {
           <p className="section-copy mx-auto mt-5 max-w-2xl">{content.description}</p>
         </div>
 
-        <div className="relative mt-12">
-          <div className="absolute left-[10%] right-[10%] top-[52px] hidden h-px bg-[#D8C39A] lg:block" />
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-5 lg:gap-2">
-            {content.steps.map((step, index) => (
-              <div key={step.number || index} className="group relative px-3 text-center">
-                <span className="text-[10px] font-medium tracking-[0.25em] text-[#B68A35]">{step.number}</span>
-                <div className="relative z-10 mx-auto mt-3 flex h-14 w-14 items-center justify-center rounded-full border border-[#D6B56D] bg-[#F8F7F4] text-sm text-[#B68A35] transition-all duration-500 group-hover:border-[#B68A35] group-hover:bg-[#B68A35] group-hover:text-white">
+        {/* Phones and tablets: vertical timeline, circles on the left joined by a thin gold line. */}
+        <ol className="mx-auto mt-10 max-w-xl space-y-6 lg:hidden">
+          {steps.map((step, index) => (
+            <li key={step.number || index} className="relative flex gap-4">
+              {index < steps.length - 1 && (
+                <span aria-hidden="true" className="sb-process-line absolute -bottom-6 left-5 top-10 w-px -translate-x-1/2" />
+              )}
+              <div className="sb-process-circle relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#D6B56D] text-sm text-[#B68A35]">
+                {index + 1}
+              </div>
+              <div className="pt-1.5 text-left">
+                <h3 className="font-[family-name:var(--font-display)] text-xl font-medium leading-tight text-[#211d19]">{step.title}</h3>
+                <p className="mt-1.5 text-sm leading-6 text-gray-500">{step.description}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+
+        {/* Computers: horizontal timeline, circles joined by a thin gold line. */}
+        <div className="relative mt-12 hidden lg:block">
+          <span aria-hidden="true" className="sb-process-line absolute top-7 h-px" style={{ left: `${50 / Math.max(steps.length, 1)}%`, right: `${50 / Math.max(steps.length, 1)}%` }} />
+          <ol className="grid gap-2" style={{ gridTemplateColumns: `repeat(${Math.max(steps.length, 1)}, minmax(0, 1fr))` }}>
+            {steps.map((step, index) => (
+              <li key={step.number || index} className="group relative px-3 text-center">
+                <div className="sb-process-circle relative z-10 mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-[#D6B56D] text-sm text-[#B68A35]">
                   {index + 1}
                 </div>
                 <h3 className="mt-5 font-[family-name:var(--font-display)] text-2xl font-medium leading-tight text-[#211d19]">{step.title}</h3>
                 <p className="mx-auto mt-3 max-w-[220px] text-sm leading-6 text-gray-500">{step.description}</p>
-              </div>
+              </li>
             ))}
-          </div>
+          </ol>
         </div>
       </div>
     </section>
