@@ -716,8 +716,6 @@ html[data-theme="dark"] #contact > .relative.z-10 {
 @media (max-width: 1023px) {
   nav[aria-label="Primary navigation"] { height: auto !important; min-height: 0 !important; }
   nav[aria-label="Primary navigation"] > div:first-child { height: 84px !important; min-height: 84px !important; padding-top: 0 !important; padding-bottom: 0 !important; }
-  nav[aria-label="Primary navigation"] #mobile-navigation { margin: 0 !important; }
-  nav[aria-label="Primary navigation"] #mobile-navigation[aria-hidden="true"] { display: none !important; }
 }
 .sb-floating-actions {
   position: fixed !important;
@@ -851,32 +849,6 @@ html[data-theme="dark"] .package-action:hover, html[data-theme="dark"] .package-
   .sb-logo-white { width: 260px; }
 }
 
-/* Mobile menu animation fix: do not use display:none on the closed panel,
-   because display changes prevent max-height/opacity transitions from running. */
-@media (max-width: 1023px) {
-  nav[aria-label="Primary navigation"] #mobile-navigation[aria-hidden="true"] {
-    display: block !important;
-    max-height: 0 !important;
-    opacity: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
-    visibility: hidden;
-    transition: max-height 360ms cubic-bezier(.22,.61,.36,1), opacity 240ms ease, padding 360ms ease, visibility 0s linear 360ms !important;
-  }
-  nav[aria-label="Primary navigation"] #mobile-navigation[aria-hidden="false"] {
-    display: block !important;
-    max-height: 85vh !important;
-    opacity: 1 !important;
-    pointer-events: auto !important;
-    visibility: visible;
-    transition: max-height 360ms cubic-bezier(.22,.61,.36,1), opacity 240ms ease, padding 360ms ease, visibility 0s !important;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  nav[aria-label="Primary navigation"] #mobile-navigation {
-    transition: none !important;
-  }
-}
 
 /* Hero eyebrow: solid white text with a soft shadow and thin gold border, readable over any video. */
 :root[data-site-theme] body .eyebrow.sb-hero-eyebrow,
@@ -896,3 +868,19 @@ html[data-theme="dark"] body .eyebrow.sb-hero-eyebrow {
   :root[data-site-theme] body .eyebrow.sb-hero-eyebrow,
   html[data-theme="dark"] body .eyebrow.sb-hero-eyebrow { font-size: 13px; }
 }
+
+/* Full-screen phone menu: WhatsApp / Instagram icons (outlined gold, fill on tap). */
+.sb-mobile-menu .sb-menu-icon {
+  display: flex;
+  width: 2.75rem;
+  height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(182, 138, 53, .7);
+  background: transparent;
+  color: #D6B56D;
+  transition: background-color .2s ease, color .2s ease;
+}
+.sb-mobile-menu .sb-menu-icon:hover,
+.sb-mobile-menu .sb-menu-icon:active,
+.sb-mobile-menu .sb-menu-icon:focus-visible { background: #B68A35; color: #fff; }
