@@ -649,11 +649,6 @@ export default function ContentEditor({ initialContent }) {
           <Field label="Instagram URL" value={content.footer.instagramHref} onChange={(v) => update("footer", "instagramHref", v)} hint="Full URL, for example https://instagram.com/yourhandle" />
           <Field label="Facebook Label" value={content.footer.facebook} onChange={(v) => update("footer", "facebook", v)} />
           <Field label="Facebook URL" value={content.footer.facebookHref} onChange={(v) => update("footer", "facebookHref", v)} hint="Full URL, for example https://facebook.com/yourpage" />
-          <Field label="Location" value={content.footer.location} onChange={(v) => update("footer", "location", v)} />
-          <Field label="Phone" value={content.footer.phone} onChange={(v) => update("footer", "phone", v)} />
-          <Field label="Email" value={content.footer.email} onChange={(v) => update("footer", "email", v)} />
-          <Field label="Button" value={content.footer.button} onChange={(v) => update("footer", "button", v)} />
-          <Field label="Button Action" value={content.footer.buttonHref} onChange={(v) => update("footer", "buttonHref", v)} hint="Example: #contact, /consultation, or an external URL." />
         </div>
         <Field label="Description" value={content.footer.description} onChange={(v) => update("footer", "description", v)} multiline />
       </SectionCard>

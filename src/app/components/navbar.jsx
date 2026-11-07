@@ -5,23 +5,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { isCalendlyUrl, openCalendly } from "../../lib/calendly-popup";
+import { BOOKING_URL, INSTAGRAM_URL, SECTION_LINKS, WHATSAPP_URL } from "../../lib/site-links";
 
-// Phone/tablet menu: a fixed list of page sections (the desktop menu uses the admin links).
-const MOBILE_LINKS = [
-  ["About", "#about"],
-  ["Services", "#services"],
-  ["Portfolio", "#portfolio"],
-  ["Packages", "#packages"],
-  ["FAQ", "#faq"],
-  ["Contact", "#contact"],
-];
-const WHATSAPP_URL = "https://wa.me/16475445681?text=" + encodeURIComponent("Hello Sterling Bloom, I'd like to discuss an event.");
-const INSTAGRAM_URL = "https://www.instagram.com/sterlingbloomdecor";
 
 export default function Navbar({ content, preview = false }) {
   const pathname = usePathname();
   const navLinks = content.links.map(([name, href]) => ({ name, href }));
-  const consultationHref = content.ctaHref && content.ctaHref !== "#contact" ? content.ctaHref : "https://calendly.com/sumaiya-sterlingbloomdecor/30min";
+  const consultationHref = content.ctaHref && content.ctaHref !== "#contact" ? content.ctaHref : BOOKING_URL;
   const logoSettings = content.logoSettings || {};
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -134,7 +124,7 @@ export default function Navbar({ content, preview = false }) {
         className={"sb-mobile-menu fixed inset-0 z-0 flex flex-col overflow-y-auto bg-[#171614] px-6 pb-6 pt-28 text-[#F4EFE7] transition-[opacity,visibility] duration-300 ease-out motion-reduce:transition-none lg:hidden " + (isOpen ? "visible opacity-100" : "pointer-events-none invisible opacity-0")}
       >
         <ul className="flex flex-col gap-1" onTouchStart={() => {}}>
-          {MOBILE_LINKS.map(([name, href]) => (
+          {SECTION_LINKS.map(([name, href]) => (
             <li key={href}>
               <a
                 href={href}

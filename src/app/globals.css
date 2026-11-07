@@ -884,3 +884,17 @@ html[data-theme="dark"] body .eyebrow.sb-hero-eyebrow {
 .sb-mobile-menu .sb-menu-icon:hover,
 .sb-mobile-menu .sb-menu-icon:active,
 .sb-mobile-menu .sb-menu-icon:focus-visible { background: #B68A35; color: #fff; }
+
+/* Footer social icons: outlined gold squares, matching the phone menu. */
+.sb-footer .sb-footer-icon {
+  display: inline-flex;
+  width: 2.5rem;
+  height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(182, 138, 53, .7);
+  color: #D6B56D;
+  transition: background-color .2s ease, color .2s ease;
+}
+.sb-footer .sb-footer-icon:hover,
+.sb-footer .sb-footer-icon:focus-visible { background: #B68A35; color: #fff; }
