@@ -38,7 +38,7 @@ export default async function AdminContentPage() {
             Edit the website without code.
           </h2>
           <p className="mt-3 max-w-2xl text-sm leading-7 text-gray-500 sm:text-base">
-            Update headings, descriptions, services, portfolio entries, packages,
+            Update headings, descriptions, services, portfolio entries, investment,
             client stories, contact details, and footer content from one place.
             Media uploads and visual positioning will be added through the Media Library next.
           </p>

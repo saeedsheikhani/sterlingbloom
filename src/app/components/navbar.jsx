@@ -10,7 +10,8 @@ import { BOOKING_URL, INSTAGRAM_URL, SECTION_LINKS, WHATSAPP_URL } from "../../l
 
 export default function Navbar({ content, preview = false }) {
   const pathname = usePathname();
-  const navLinks = content.links.map(([name, href]) => ({ name, href }));
+  // Older saved menus still point at the removed Packages section; show Investment instead.
+  const navLinks = content.links.map(([name, href]) => (href === "#packages" ? { name: "Investment", href: "#investment" } : { name, href }));
   const consultationHref = content.ctaHref && content.ctaHref !== "#contact" ? content.ctaHref : BOOKING_URL;
   const logoSettings = content.logoSettings || {};
   const [isOpen, setIsOpen] = useState(false);

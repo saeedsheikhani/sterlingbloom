@@ -1,7 +1,19 @@
-import ReviewForm from "./review-form";
+const GOOGLE_DEFAULTS = {
+  googleRating: "5.0",
+  googleLinkText: "Read Our Reviews on Google",
+  googleUrl: "https://share.google/rmH7zZms0fO6ToQA5",
+  googleReviewText: "Leave Us a Google Review",
+};
 
 export default function Testimonials({ content, approvedReviews = [] }) {
   const displayItems = approvedReviews.map((review) => ({ name: review.name, event: review.event, review: review.review, approved: true }));
+  // Only show the section once there are at least 2 approved reviews.
+  if (displayItems.length < 2) return null;
+
+  const googleRating = content?.googleRating || GOOGLE_DEFAULTS.googleRating;
+  const googleLinkText = content?.googleLinkText || GOOGLE_DEFAULTS.googleLinkText;
+  const googleUrl = content?.googleUrl || GOOGLE_DEFAULTS.googleUrl;
+  const googleReviewText = content?.googleReviewText || GOOGLE_DEFAULTS.googleReviewText;
 
   return (
     <section data-reveal id="testimonials" className="bg-[#F8F7F4] py-20 sm:py-24 lg:py-28">
@@ -11,6 +23,15 @@ export default function Testimonials({ content, approvedReviews = [] }) {
           <div className="mx-auto mt-5 h-px w-16 bg-[#B68A35]" />
           <h2 className="section-heading mx-auto mt-7 max-w-4xl">{content?.heading}</h2>
           <p className="section-copy mx-auto mt-5 max-w-2xl">{content?.description}</p>
+          <div className="mt-6 flex flex-col items-center gap-2 sm:flex-row sm:justify-center sm:gap-4">
+            <p className="sb-google-rating text-sm font-medium tracking-[0.06em]">
+              {googleRating} <span aria-hidden="true">★</span><span className="sr-only">stars</span> on Google
+            </p>
+            <span className="hidden h-4 w-px bg-current opacity-30 sm:block" aria-hidden="true" />
+            <a href={googleUrl} target="_blank" rel="noopener noreferrer" className="sb-google-link text-xs font-medium uppercase tracking-[0.16em] underline decoration-[#B68A35]/60 underline-offset-4 transition hover:decoration-[#D6B56D]">
+              {googleLinkText}
+            </a>
+          </div>
         </div>
 
         <div className="-mx-5 mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-0 md:mt-12 md:grid md:grid-cols-3 md:gap-5 md:overflow-visible md:px-0 md:pb-0">
@@ -33,12 +54,14 @@ export default function Testimonials({ content, approvedReviews = [] }) {
           ))}
         </div>
 
-        {!displayItems.length && <p className="mx-auto mt-10 max-w-xl border border-dashed border-gray-300 px-6 py-8 text-center text-sm leading-6 text-gray-500">Our client reviews will appear here once they have been reviewed and approved.</p>}
-
         <p className="mt-2 text-center text-[10px] uppercase tracking-[0.18em] text-gray-400 md:hidden">Swipe to explore reviews</p>
 
 
-        <ReviewForm />
+        <p className="mt-8 text-center">
+          <a href={googleUrl} target="_blank" rel="noopener noreferrer" className="sb-google-review-link inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.16em] underline decoration-[#B68A35]/60 underline-offset-4 transition hover:decoration-[#D6B56D]">
+            <span aria-hidden="true">★</span> {googleReviewText}
+          </a>
+        </p>
       </div>
     </section>
   );

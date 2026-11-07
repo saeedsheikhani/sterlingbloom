@@ -15,7 +15,7 @@ export default function FAQ({ content = {} }) {
   const items = Array.isArray(content.items) ? content.items : fallbackItems;
   return (
     <section id="faq" data-reveal className="sb-faq-section">
-      <div className="mx-auto max-w-4xl px-5 py-20 sm:px-8 sm:py-24">
+      <div className="mx-auto max-w-4xl px-5 py-8 sm:px-8 md:py-[var(--sb-section-spacing,56px)]">
         <p className="eyebrow">{content.eyebrow || "GOOD TO KNOW"}</p>
         <h2 className="section-heading mt-4 font-[family-name:var(--font-display)] text-4xl sm:text-5xl">{content.heading || "Frequently Asked Questions"}</h2>
         <p className="section-copy mt-4 max-w-2xl text-base leading-7">{content.description || "A few helpful details before we start planning your celebration."}</p>

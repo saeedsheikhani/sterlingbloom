@@ -32,3 +32,20 @@ export async function PATCH(request) {
     return NextResponse.json({ error: "Unable to update review." }, { status: 500 });
   }
 }
+
+export async function DELETE(request) {
+  if (!(await isAdminAuthenticated())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  try {
+    const body = await request.json();
+    if (!body.id) return NextResponse.json({ error: "Invalid review." }, { status: 400 });
+
+    await connectDB();
+    const review = await Review.findByIdAndDelete(body.id).lean();
+    if (!review) return NextResponse.json({ error: "Review not found." }, { status: 404 });
+
+    return NextResponse.json({ ok: true });
+  } catch (error) {
+    console.error("Admin review delete failed:", error);
+    return NextResponse.json({ error: "Unable to delete review." }, { status: 500 });
+  }
+}

@@ -17,6 +17,17 @@ export default function AdminReviewsPage() {
 
   useEffect(() => { load(); }, []);
 
+  async function deleteReview(review) {
+    if (!window.confirm("Permanently delete the review from \u201c" + review.name + "\u201d? This can\u2019t be undone.")) return;
+    const response = await fetch("/api/admin/reviews", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: review._id }),
+    });
+    if (response.ok) setReviews((current) => current.filter((item) => item._id !== review._id));
+    else window.alert("The review couldn\u2019t be deleted. Please try again.");
+  }
+
   async function updateStatus(id, status) {
     await fetch("/api/admin/reviews", {
       method: "PATCH",
@@ -54,6 +65,7 @@ export default function AdminReviewsPage() {
                 {review.status !== "approved" && <button onClick={() => updateStatus(review._id, "approved")} className="rounded-[8px] bg-[#B68A35] px-4 py-2 text-xs font-medium uppercase tracking-[0.12em] text-white">Approve & Publish</button>}
                 {review.status !== "rejected" && <button onClick={() => updateStatus(review._id, "rejected")} className="rounded-[8px] border border-gray-200 px-4 py-2 text-xs font-medium uppercase tracking-[0.12em] text-gray-600">Reject</button>}
                 {review.status !== "pending" && <button onClick={() => updateStatus(review._id, "pending")} className="rounded-[8px] border border-gray-200 px-4 py-2 text-xs font-medium uppercase tracking-[0.12em] text-gray-600">Move to Pending</button>}
+                <button onClick={() => deleteReview(review)} className="ml-auto rounded-[8px] border border-red-200 px-4 py-2 text-xs font-medium uppercase tracking-[0.12em] text-red-600 hover:bg-red-50">Delete</button>
               </div>
             </article>
           ))}
