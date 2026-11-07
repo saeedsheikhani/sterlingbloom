@@ -713,7 +713,7 @@ html[data-theme="dark"] #contact > .relative.z-10 {
 
 
 /* Targeted mobile fixes: constrain the closed navbar and remove inherited empty theme-control space. */
-@media (max-width: 767px) {
+@media (max-width: 1023px) {
   nav[aria-label="Primary navigation"] { height: auto !important; min-height: 0 !important; }
   nav[aria-label="Primary navigation"] > div:first-child { height: 84px !important; min-height: 84px !important; padding-top: 0 !important; padding-bottom: 0 !important; }
   nav[aria-label="Primary navigation"] #mobile-navigation { margin: 0 !important; }
@@ -767,9 +767,12 @@ html[data-theme="dark"] #contact > .relative.z-10 {
 /* Final compact theme control: isolate it from global button and flex sizing rules. */
 html body .sb-floating-actions { position: fixed !important; display: block !important; width: 0 !important; height: 0 !important; min-width: 0 !important; min-height: 0 !important; padding: 0 !important; margin: 0 !important; border: 0 !important; background: transparent !important; box-shadow: none !important; overflow: visible !important; right: 1rem !important; bottom: 1rem !important; left: auto !important; }
 html body .sb-floating-actions .sb-theme-toggle { position: fixed !important; right: 1rem !important; bottom: 1rem !important; display: flex !important; width: 3.25rem !important; height: 3.25rem !important; min-width: 3.25rem !important; max-width: 3.25rem !important; min-height: 3.25rem !important; padding: 0 !important; margin: 0 !important; border: 1px solid #b68a35 !important; background: #211d19 !important; color: #e6c783 !important; box-sizing: border-box !important; }
-html body .sb-floating-actions .sb-floating-book { position: fixed !important; right: 1rem !important; bottom: 4.75rem !important; }
+html body .sb-floating-actions .sb-floating-book { position: fixed !important; right: 1rem !important; bottom: 1rem !important; }
 html body .sb-floating-actions::before, html body .sb-floating-actions::after { content: none !important; display: none !important; }
-@media (max-width: 640px) { html body .sb-floating-actions .sb-theme-toggle { right: .75rem !important; bottom: .75rem !important; width: 3rem !important; height: 3rem !important; min-width: 3rem !important; max-width: 3rem !important; min-height: 3rem !important; } html body .sb-floating-actions .sb-floating-book { right: .75rem !important; bottom: 4.25rem !important; } }
+/* Hide the floating booking button while the hero (which has its own Book button) is on screen. */
+html body .sb-floating-actions.is-hidden .sb-floating-book { opacity: 0 !important; transform: translateY(12px) !important; pointer-events: none !important; }
+html body .sb-floating-actions .sb-floating-book { transition: opacity .3s ease, transform .3s ease, filter .2s !important; }
+@media (max-width: 640px) { html body .sb-floating-actions .sb-theme-toggle { right: .75rem !important; bottom: .75rem !important; width: 3rem !important; height: 3rem !important; min-width: 3rem !important; max-width: 3rem !important; min-height: 3rem !important; } html body .sb-floating-actions .sb-floating-book { right: .75rem !important; bottom: .75rem !important; } }
 
 
 /* Animated FAQ accordion: height/opacity transition with reduced-motion support. */
@@ -836,9 +839,21 @@ html[data-theme="dark"] .package-action:hover, html[data-theme="dark"] .package-
 }
 
 
+/* White horizontal logo shown while the navbar sits over the hero video. */
+.sb-logo-white {
+  display: block;
+  width: min(210px, calc(100vw - 112px));
+}
+@media (min-width: 640px) {
+  .sb-logo-white { width: 230px; }
+}
+@media (min-width: 1024px) {
+  .sb-logo-white { width: 260px; }
+}
+
 /* Mobile menu animation fix: do not use display:none on the closed panel,
    because display changes prevent max-height/opacity transitions from running. */
-@media (max-width: 767px) {
+@media (max-width: 1023px) {
   nav[aria-label="Primary navigation"] #mobile-navigation[aria-hidden="true"] {
     display: block !important;
     max-height: 0 !important;
