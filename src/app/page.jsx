@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import Hero from "./components/hero";
 import About from "./components/about";
 import Services from "./components/services";
@@ -9,6 +10,7 @@ import Contact from "./components/contact";
 import ScrollReveal from "./components/scroll-reveal";
 import FAQ from "./components/faq";
 import { getSiteContent } from "../lib/site-content";
+import { getSectionOrder } from "../lib/section-order";
 import connectDB from "../lib/mongodb";
 import Review from "../models/Review";
 
@@ -25,19 +27,23 @@ export default async function Home() {
     console.error("Approved reviews load failed:", error);
   }
   const visible = (key) => content.visibility?.[key] !== false;
+  // Sections after the hero, shown in the order chosen in Admin → Page Sections.
+  const sections = {
+    about: <About content={content.about} />,
+    services: <Services content={content.services} />,
+    gallery: <Gallery content={content.gallery} />,
+    process: <Process content={content.process} />,
+    investment: <Investment content={content.investment} />,
+    testimonials: <Testimonials content={content.testimonials} approvedReviews={approvedReviews} />,
+    faq: <FAQ content={content.faq} />,
+    contact: <Contact content={content.contact} />,
+  };
 
   return (
     <main id="main-content" tabIndex={-1}>
       <ScrollReveal />
       {visible("hero") && <Hero content={content.hero} />}
-      {visible("about") && <About content={content.about} />}
-      {visible("services") && <Services content={content.services} />}
-      {visible("gallery") && <Gallery content={content.gallery} />}
-      {visible("process") && <Process content={content.process} />}
-      {visible("investment") && <Investment content={content.investment} />}
-      {visible("testimonials") && <Testimonials content={content.testimonials} approvedReviews={approvedReviews} />}
-      {visible("faq") && <FAQ content={content.faq} />}
-      {visible("contact") && <Contact content={content.contact} />}
+      {getSectionOrder(content).filter(visible).map((key) => <Fragment key={key}>{sections[key]}</Fragment>)}
     </main>
   );
 }

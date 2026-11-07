@@ -2,8 +2,10 @@ import connectDB from "./mongodb";
 import SiteContent from "../models/SiteContent";
 import { DEFAULT_PORTFOLIO_TABS } from "./portfolio-tabs";
 import { INVESTMENT_DEFAULTS } from "./investment-defaults";
+import { DEFAULT_SECTION_ORDER } from "./section-order";
 
 export const defaultSiteContent = {
+  sectionOrder: DEFAULT_SECTION_ORDER,
   visibility: {
     hero: true, about: true, services: true, gallery: true, process: true,
     investment: true, testimonials: true,
