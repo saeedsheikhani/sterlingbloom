@@ -11,6 +11,9 @@ gsap.registerPlugin(useGSAP);
 // Vertical video shown on phones if the admin "Mobile Hero Video" field is empty.
 // The admin "Hero Video" field is used on larger screens.
 const MOBILE_VIDEO_URL = "https://res.cloudinary.com/xuv4gqwa/video/upload/v1794070444/sterling-bloom/bi5eczuoemda9ihrvuuh.mp4";
+// Admin fields left empty (or only spaces) are hidden instead of leaving a blank box.
+const hasText = (value) => typeof value === "string" && value.trim() !== "";
+
 const DEFAULT_BOOKING_URL = "https://calendly.com/sumaiya-sterlingbloomdecor/30min";
 
 export default function Hero({ content }) {
@@ -69,33 +72,41 @@ export default function Hero({ content }) {
       </video>
       )}
 
-      <div className="absolute inset-0 z-10 bg-black/45" />
-      <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/55 via-black/25 to-black/10" />
+      {/* Phones: light overall tint plus a dark fade at the bottom behind the text, so the top of the video stays clear. */}
+      <div className="absolute inset-0 z-10 bg-black/20 md:bg-black/45" />
+      <div className="absolute inset-x-0 top-0 z-10 h-36 bg-gradient-to-b from-black/50 to-transparent md:hidden" />
+      <div className="absolute inset-x-0 bottom-0 z-10 h-[70%] bg-gradient-to-t from-black/85 via-black/45 to-transparent md:hidden" />
+      <div className="absolute inset-0 z-10 hidden bg-gradient-to-r from-black/55 via-black/25 to-black/10 md:block" />
 
-      <div className="relative z-10 flex min-h-[100svh] items-start px-5 pb-20 pt-[6.75rem] sm:items-center sm:px-8 sm:pt-20 lg:min-h-screen lg:px-12">
+      {/* Phones: text sits at the bottom, with room for the floating buttons. Tablets and up: centred as before. */}
+      <div className="relative z-10 flex min-h-[100svh] items-end px-5 pb-28 pt-[6.75rem] sm:px-8 md:items-center md:pb-20 md:pt-20 lg:min-h-screen lg:px-12">
         <div className="mx-auto w-full max-w-7xl">
           <div className="max-w-4xl">
-            <p ref={eyebrowRef} className="eyebrow border-white/40 text-white">
-              {content.eyebrow}
-            </p>
+            {hasText(content.eyebrow) && (
+              <p ref={eyebrowRef} className="eyebrow mb-5 border-white/40 text-white">
+                {content.eyebrow}
+              </p>
+            )}
 
             <h1
               ref={titleRef}
               style={{ opacity: 1 }}
-              className="mt-5 max-w-4xl font-[family-name:var(--font-display)] text-[2.5rem] font-medium leading-[1] tracking-[-0.025em] text-white sm:text-6xl sm:leading-[0.94] lg:text-8xl"
+              className="max-w-4xl font-[family-name:var(--font-display)] text-[2.5rem] font-medium leading-[1] tracking-[-0.025em] text-white sm:text-6xl sm:leading-[0.94] lg:text-8xl"
             >
               {content.before}{" "}
               <span className="special-text">{content.highlight}</span>
               {content.after}
             </h1>
 
-            <p
-              ref={textRef}
-              style={{ opacity: 1 }}
-              className="mt-5 max-w-2xl text-[0.95rem] leading-7 text-white/85 sm:mt-6 sm:text-lg sm:leading-8 lg:text-xl"
-            >
-              {content.description}
-            </p>
+            {hasText(content.description) && (
+              <p
+                ref={textRef}
+                style={{ opacity: 1 }}
+                className="mt-5 max-w-2xl text-[0.95rem] leading-7 text-white/85 sm:mt-6 sm:text-lg sm:leading-8 lg:text-xl"
+              >
+                {content.description}
+              </p>
+            )}
 
             <div ref={buttonsRef} style={{ opacity: 1 }} className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row">
               {isCalendlyUrl(primaryHref) ? (
@@ -107,9 +118,6 @@ export default function Hero({ content }) {
                   {content.primaryButton}
                 </Link>
               )}
-              <Link href={content.secondaryButtonHref || "#portfolio"} className="btn-ghost sb-hero-outline">
-                {content.secondaryButton}
-              </Link>
             </div>
           </div>
         </div>

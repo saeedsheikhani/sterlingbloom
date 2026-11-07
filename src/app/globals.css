@@ -393,17 +393,6 @@ html[data-theme="dark"] .sb-floating-book {
   background-color: var(--sb-accent) !important;
   color: #fff !important;
 }
-/* Hero secondary button: gold outline so the booking button stays the main action. */
-html[data-theme="dark"] .btn-ghost.sb-hero-outline {
-  background-color: transparent !important;
-  border: 1px solid #D6B56D !important;
-  color: #fff !important;
-}
-html[data-theme="dark"] .btn-ghost.sb-hero-outline:hover,
-html[data-theme="dark"] .btn-ghost.sb-hero-outline:focus-visible {
-  background-color: var(--sb-accent, #B68A35) !important;
-  border-color: var(--sb-accent, #B68A35) !important;
-}
 html[data-theme="dark"] .package-action:not(:hover):not(:focus-visible) { color: var(--sb-accent-light) !important; }
 html[data-theme="dark"] .package-action:hover,
 html[data-theme="dark"] .package-action:focus-visible { background-color: #9f762e !important; color: #fff !important; }
@@ -780,6 +769,9 @@ html body .sb-floating-actions { position: fixed !important; display: block !imp
 html body .sb-floating-actions .sb-theme-toggle { position: fixed !important; right: 1rem !important; bottom: 1rem !important; display: flex !important; width: 3.25rem !important; height: 3.25rem !important; min-width: 3.25rem !important; max-width: 3.25rem !important; min-height: 3.25rem !important; padding: 0 !important; margin: 0 !important; border: 1px solid #b68a35 !important; background: #211d19 !important; color: #e6c783 !important; box-sizing: border-box !important; }
 html body .sb-floating-actions .sb-floating-book { position: fixed !important; right: 1rem !important; bottom: 1rem !important; }
 html body .sb-floating-actions::before, html body .sb-floating-actions::after { content: none !important; display: none !important; }
+/* Hide the floating booking button while the hero (which has its own Book button) is on screen. */
+html body .sb-floating-actions.is-hidden .sb-floating-book { opacity: 0 !important; transform: translateY(12px) !important; pointer-events: none !important; }
+html body .sb-floating-actions .sb-floating-book { transition: opacity .3s ease, transform .3s ease, filter .2s !important; }
 @media (max-width: 640px) { html body .sb-floating-actions .sb-theme-toggle { right: .75rem !important; bottom: .75rem !important; width: 3rem !important; height: 3rem !important; min-width: 3rem !important; max-width: 3rem !important; min-height: 3rem !important; } html body .sb-floating-actions .sb-floating-book { right: .75rem !important; bottom: .75rem !important; } }
 
 
