@@ -1,11 +1,17 @@
 "use client";
 
 import { useState } from "react";
+import { openCalendly } from "../../lib/calendly-popup";
+import { BOOKING_URL } from "../../lib/site-links";
 
 // Keep these in sync with the server list in src/app/api/inquiries/route.js.
 const EVENT_TYPES = ["Wedding", "Ceremony", "Nikah", "Mehndi", "Engagement", "Bridal Shower", "Other"];
 const ROLES = ["Couple", "Family Member", "Wedding Planner"];
 const BUDGETS = ["$5,000–$10,000", "$10,000–$20,000", "$20,000+", "Not sure yet, I'd like guidance"];
+
+const labelClass = "mb-1.5 block text-[10px] font-medium uppercase tracking-[0.12em] text-gray-500 sm:text-xs";
+const fieldClass = "w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm outline-none transition placeholder:text-gray-400 focus:border-[#B68A35] focus:ring-2 focus:ring-[#B68A35]/10";
+const selectClass = "w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm text-gray-600 outline-none transition focus:border-[#B68A35] focus:ring-2 focus:ring-[#B68A35]/10";
 
 export default function Contact({ content }) {
   const [status, setStatus] = useState("idle");
@@ -56,8 +62,6 @@ export default function Contact({ content }) {
               phone: payload.phone,
               eventType,
               eventDate: payload.eventDate || "Not provided",
-              venue: payload.venue || "Not provided",
-              guestCount: payload.guestCount || "Not provided",
               budget: payload.budget || "Not provided",
               message: payload.message,
               botcheck: "",
@@ -99,6 +103,14 @@ export default function Contact({ content }) {
             <p className="inline-flex border border-[#C9A45C] px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-[#D6B56D] sm:text-xs">{content.eyebrow}</p>
             <h2 className="mt-7 max-w-xl font-[family-name:var(--font-display)] text-4xl font-medium leading-[1.05] sm:text-5xl lg:text-6xl">{content.heading}<span className="block text-[#D6B56D]">{content.highlight}</span></h2>
             <p className="mt-6 max-w-lg text-base leading-7 text-white/65 sm:text-lg sm:leading-8">{content.description}</p>
+            {/* Booking line: the middle part opens the Calendly popup. Text is editable in the admin panel. */}
+            <p className="sb-contact-booking mt-4 max-w-lg text-base leading-7 sm:text-lg sm:leading-8">
+              {(content.bookingIntro ?? "Ready to talk?")}{" "}
+              <button type="button" onClick={(event) => openCalendly(event, BOOKING_URL)} className="sb-contact-booking-link underline decoration-[#B68A35]/70 underline-offset-4 transition hover:decoration-[#D6B56D]">
+                {content.bookingLinkText || "Book a consultation"}
+              </button>{" "}
+              {(content.bookingOutro ?? "directly, or send us a few details below.")}
+            </p>
             <div className="mt-9 grid gap-5 sm:grid-cols-2 lg:grid-cols-1 lg:gap-6">
               <a href={`tel:${String(content.phone || "").replace(/[^+\d]/g, "")}`} className="transition hover:text-[#D6B56D]"><p className="text-[10px] font-medium uppercase tracking-[0.15em] text-[#D6B56D]">Phone</p><p className="mt-1 text-sm text-white/80">{content.phone}</p></a>
               <a href={`mailto:${content.email || ""}`} className="transition hover:text-[#D6B56D]"><p className="text-[10px] font-medium uppercase tracking-[0.15em] text-[#D6B56D]">Email</p><p className="mt-1 text-sm text-white/80">{content.email}</p></a>
@@ -115,55 +127,54 @@ export default function Contact({ content }) {
               <p className="mt-2 max-w-md text-sm leading-6 text-gray-500">{content.formDescription}</p>
             </div>
 
-            <form className="space-y-5" onSubmit={handleSubmit}>
-              {[
-                ["name", "Your Name", "text", "Enter your name"],
-                ["email", "Email Address", "email", "Enter your email"],
-                ["phone", "Phone Number", "tel", "Enter your phone number"],
-              ].map(([id, label, type, placeholder]) => (
-                <div key={id}>
-                  <label htmlFor={id} className="mb-2 block text-[10px] font-medium uppercase tracking-[0.12em] text-gray-500 sm:text-xs">{label}</label>
-                  <input id={id} name={id} type={type} placeholder={placeholder} required autoComplete={id === "name" ? "name" : id === "email" ? "email" : "tel"} className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3.5 text-sm outline-none transition placeholder:text-gray-400 focus:border-[#B68A35] focus:ring-2 focus:ring-[#B68A35]/10" />
-                </div>
-              ))}
-              <div>
-                <label htmlFor="role" className="mb-2 block text-[10px] font-medium uppercase tracking-[0.12em] text-gray-500 sm:text-xs">I am a</label>
-                <select id="role" name="role" defaultValue="" required className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3.5 text-sm text-gray-600 outline-none transition focus:border-[#B68A35] focus:ring-2 focus:ring-[#B68A35]/10">
-                  <option value="" disabled>Select one</option>
-                  {ROLES.map((role) => <option key={role} value={role}>{role}</option>)}
-                </select>
-              </div>
-              <div>
-                <label htmlFor="event" className="mb-2 block text-[10px] font-medium uppercase tracking-[0.12em] text-gray-500 sm:text-xs">Event Type</label>
-                <select id="event" name="event" defaultValue="" required className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3.5 text-sm text-gray-600 outline-none transition focus:border-[#B68A35] focus:ring-2 focus:ring-[#B68A35]/10">
-                  <option value="" disabled>Select an event</option>
-                  {EVENT_TYPES.map((type) => <option key={type} value={type}>{type}</option>)}
-                </select>
-              </div>
-              <div className="grid gap-5 sm:grid-cols-2">
+            {/* Compact form: pairs sit side by side on tablets and computers, one column on phones. */}
+            <form className="space-y-4" onSubmit={handleSubmit}>
+              <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <label htmlFor="eventDate" className="mb-2 block text-[10px] font-medium uppercase tracking-[0.12em] text-gray-500 sm:text-xs">Event Date <span className="normal-case tracking-normal">(optional)</span></label>
-                  <input id="eventDate" name="eventDate" type="date" min={new Date().toISOString().slice(0, 10)} className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3.5 text-sm outline-none transition focus:border-[#B68A35] focus:ring-2 focus:ring-[#B68A35]/10" />
+                  <label htmlFor="name" className={labelClass}>Your Name</label>
+                  <input id="name" name="name" type="text" placeholder="Enter your name" required autoComplete="name" className={fieldClass} />
                 </div>
                 <div>
-                  <label htmlFor="guestCount" className="mb-2 block text-[10px] font-medium uppercase tracking-[0.12em] text-gray-500 sm:text-xs">Guest Count <span className="normal-case tracking-normal">(optional)</span></label>
-                  <input id="guestCount" name="guestCount" inputMode="numeric" placeholder="Approx. number of guests" className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3.5 text-sm outline-none transition focus:border-[#B68A35] focus:ring-2 focus:ring-[#B68A35]/10" />
+                  <label htmlFor="email" className={labelClass}>Email Address</label>
+                  <input id="email" name="email" type="email" placeholder="Enter your email" required autoComplete="email" className={fieldClass} />
+                </div>
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label htmlFor="phone" className={labelClass}>Phone Number</label>
+                  <input id="phone" name="phone" type="tel" placeholder="Enter your phone number" required autoComplete="tel" className={fieldClass} />
+                </div>
+                <div>
+                  <label htmlFor="role" className={labelClass}>I am a</label>
+                  <select id="role" name="role" defaultValue="" required className={selectClass}>
+                    <option value="" disabled>Select one</option>
+                    {ROLES.map((role) => <option key={role} value={role}>{role}</option>)}
+                  </select>
+                </div>
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label htmlFor="event" className={labelClass}>Event Type</label>
+                  <select id="event" name="event" defaultValue="" required className={selectClass}>
+                    <option value="" disabled>Select an event</option>
+                    {EVENT_TYPES.map((type) => <option key={type} value={type}>{type}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label htmlFor="eventDate" className={labelClass}>Event Date <span className="normal-case tracking-normal">(optional)</span></label>
+                  <input id="eventDate" name="eventDate" type="date" min={new Date().toISOString().slice(0, 10)} className={fieldClass} />
                 </div>
               </div>
               <div>
-                <label htmlFor="venue" className="mb-2 block text-[10px] font-medium uppercase tracking-[0.12em] text-gray-500 sm:text-xs">Venue / City <span className="normal-case tracking-normal">(optional)</span></label>
-                <input id="venue" name="venue" placeholder="Where will your event take place?" className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3.5 text-sm outline-none transition focus:border-[#B68A35] focus:ring-2 focus:ring-[#B68A35]/10" />
-              </div>
-              <div>
-                <label htmlFor="budget" className="mb-2 block text-[10px] font-medium uppercase tracking-[0.12em] text-gray-500 sm:text-xs">Estimated Budget</label>
-                <select id="budget" name="budget" defaultValue="" required className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3.5 text-sm text-gray-600 outline-none transition focus:border-[#B68A35] focus:ring-2 focus:ring-[#B68A35]/10">
+                <label htmlFor="budget" className={labelClass}>Estimated Budget</label>
+                <select id="budget" name="budget" defaultValue="" required className={selectClass}>
                   <option value="" disabled>Select a budget</option>
                   {BUDGETS.map((budget) => <option key={budget} value={budget}>{budget}</option>)}
                 </select>
               </div>
               <div>
-                <label htmlFor="message" className="mb-2 block text-[10px] font-medium uppercase tracking-[0.12em] text-gray-500 sm:text-xs">Tell Us About Your Event</label>
-                <textarea id="message" name="message" rows="4" placeholder="Tell us about your event, date, venue, and vision..." required className="w-full resize-none rounded-lg border border-gray-200 bg-white px-4 py-3.5 text-sm outline-none transition placeholder:text-gray-400 focus:border-[#B68A35] focus:ring-2 focus:ring-[#B68A35]/10" />
+                <label htmlFor="message" className={labelClass}>Tell Us About Your Event</label>
+                <textarea id="message" name="message" rows="3" placeholder="Tell us about your event, venue, guest count, and vision" required className={fieldClass + " resize-none"} />
               </div>
 
               {status === "error" && (

@@ -93,15 +93,22 @@ export default function Navbar({ content, preview = false }) {
           {navLinks.map((link) => (
             <Link key={link.name} href={link.href} className="text-sm transition-colors hover:text-[#D6B56D]">{link.name}</Link>
           ))}
+          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" aria-label="Chat with Sterling Bloom on WhatsApp" title="Chat on WhatsApp" className="sb-nav-whatsapp ml-2 h-10 w-10">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M20.5 3.5A11.7 11.7 0 0 0 2.1 17.6L.5 23.5l6-1.6A11.7 11.7 0 0 0 20.5 3.5ZM12 21a9.6 9.6 0 0 1-4.9-1.3l-.4-.2-3.5.9.9-3.4-.2-.4A9.5 9.5 0 1 1 12 21Zm5.2-7.1c-.3-.2-1.7-.8-2-.9s-.5-.2-.7.2-.8.9-.9 1.1-.3.2-.6.1a7.8 7.8 0 0 1-2.3-1.4 8.6 8.6 0 0 1-1.6-2c-.2-.3 0-.5.1-.6l.5-.6c.2-.2.2-.3.3-.5s0-.4 0-.5-.7-1.7-1-2.3c-.2-.5-.5-.4-.7-.4H7.7c-.2 0-.5.1-.8.4s-1.1 1.1-1.1 2.6 1.1 3 1.3 3.2a11.3 11.3 0 0 0 4.4 3.9c.6.3 1.1.4 1.5.6.6.2 1.2.2 1.7.1.5-.1 1.7-.7 1.9-1.4s.2-1.3.2-1.4-.2-.2-.5-.4Z"/></svg>
+          </a>
           {isCalendlyUrl(consultationHref) ? (
-            <button type="button" onClick={(e) => openCalendly(e, consultationHref)} className="btn-primary ml-2 px-5 py-2.5">
+            <button type="button" onClick={(e) => openCalendly(e, consultationHref)} className="btn-primary px-5 py-2.5">
               {content.cta}
             </button>
           ) : (
-            <a href={consultationHref} className="btn-primary ml-2 px-5 py-2.5">{content.cta}</a>
+            <a href={consultationHref} className="btn-primary px-5 py-2.5">{content.cta}</a>
           )}
         </div>
 
+        <div className="flex items-center gap-3 lg:hidden">
+        <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" aria-label="Chat with Sterling Bloom on WhatsApp" title="Chat on WhatsApp" className="sb-nav-whatsapp h-11 w-11">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M20.5 3.5A11.7 11.7 0 0 0 2.1 17.6L.5 23.5l6-1.6A11.7 11.7 0 0 0 20.5 3.5ZM12 21a9.6 9.6 0 0 1-4.9-1.3l-.4-.2-3.5.9.9-3.4-.2-.4A9.5 9.5 0 1 1 12 21Zm5.2-7.1c-.3-.2-1.7-.8-2-.9s-.5-.2-.7.2-.8.9-.9 1.1-.3.2-.6.1a7.8 7.8 0 0 1-2.3-1.4 8.6 8.6 0 0 1-1.6-2c-.2-.3 0-.5.1-.6l.5-.6c.2-.2.2-.3.3-.5s0-.4 0-.5-.7-1.7-1-2.3c-.2-.5-.5-.4-.7-.4H7.7c-.2 0-.5.1-.8.4s-1.1 1.1-1.1 2.6 1.1 3 1.3 3.2a11.3 11.3 0 0 0 4.4 3.9c.6.3 1.1.4 1.5.6.6.2 1.2.2 1.7.1.5-.1 1.7-.7 1.9-1.4s.2-1.3.2-1.4-.2-.2-.5-.4Z"/></svg>
+        </a>
         <button
           className="group relative flex h-11 w-11 items-center justify-center rounded-[2px] border border-current/30 lg:hidden"
           onClick={() => setIsOpen(!isOpen)}
@@ -116,6 +123,7 @@ export default function Navbar({ content, preview = false }) {
             <span className={"absolute left-0 top-4 h-px w-5 origin-center bg-current transition-transform duration-300 ease-out " + (isOpen ? "-translate-y-1.5 -rotate-45" : "")} />
           </span>
         </button>
+        </div>
       </div>
 
       <div
