@@ -713,7 +713,7 @@ html[data-theme="dark"] #contact > .relative.z-10 {
 
 
 /* Targeted mobile fixes: constrain the closed navbar and remove inherited empty theme-control space. */
-@media (max-width: 767px) {
+@media (max-width: 1023px) {
   nav[aria-label="Primary navigation"] { height: auto !important; min-height: 0 !important; }
   nav[aria-label="Primary navigation"] > div:first-child { height: 84px !important; min-height: 84px !important; padding-top: 0 !important; padding-bottom: 0 !important; }
   nav[aria-label="Primary navigation"] #mobile-navigation { margin: 0 !important; }
@@ -836,9 +836,21 @@ html[data-theme="dark"] .package-action:hover, html[data-theme="dark"] .package-
 }
 
 
+/* White horizontal logo shown while the navbar sits over the hero video. */
+.sb-logo-white {
+  display: block;
+  width: min(210px, calc(100vw - 112px));
+}
+@media (min-width: 640px) {
+  .sb-logo-white { width: 230px; }
+}
+@media (min-width: 1024px) {
+  .sb-logo-white { width: 260px; }
+}
+
 /* Mobile menu animation fix: do not use display:none on the closed panel,
    because display changes prevent max-height/opacity transitions from running. */
-@media (max-width: 767px) {
+@media (max-width: 1023px) {
   nav[aria-label="Primary navigation"] #mobile-navigation[aria-hidden="true"] {
     display: block !important;
     max-height: 0 !important;

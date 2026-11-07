@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import BrandLogo from "./brand-logo";
 import { isCalendlyUrl, openCalendly } from "../../lib/calendly-popup";
@@ -16,6 +17,17 @@ export default function Navbar({ content, preview = false }) {
   const logoRadius = Math.max(0, Math.min(50, Number(logoSettings.borderRadius) || 0));
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isDark, setIsDark] = useState(true);
+
+  // Follow the site's light/dark mode, which the theme toggle stores on <html data-theme>.
+  useEffect(() => {
+    const root = document.documentElement;
+    const update = () => setIsDark(root.dataset.theme !== "light");
+    update();
+    const observer = new MutationObserver(update);
+    observer.observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     if (pathname?.startsWith("/admin") && !preview) return undefined;
@@ -57,6 +69,10 @@ export default function Navbar({ content, preview = false }) {
     ? "bg-[#F8F7F4]/96 text-[#6f5226] shadow-[0_8px_30px_rgba(29,24,19,0.08)] backdrop-blur-xl"
     : "bg-transparent text-white";
 
+  // White logo whenever the navbar is dark: see-through over the hero, or solid in dark mode.
+  // The original logo shows only when the navbar is solid cream (light mode).
+  const showWhiteLogo = isDark || (!isScrolled && !isOpen);
+
   const effectiveNavClass = isOpen
     ? "bg-[#F8F7F4]/96 text-[#6f5226] shadow-[0_8px_30px_rgba(29,24,19,0.08)] backdrop-blur-xl"
     : navClass;
@@ -65,7 +81,20 @@ export default function Navbar({ content, preview = false }) {
     <nav aria-label="Primary navigation" className={"fixed left-0 top-0 z-50 w-full transition-all duration-500 " + effectiveNavClass}>
       <div className={"sb-navbar-inner mx-auto flex max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-10 " + (isScrolled ? "is-scrolled" : "")}
         style={{ "--sb-logo-mobile": mobileLogoSize + "px", "--sb-logo-desktop": desktopLogoSize + "px", "--sb-logo-radius": logoRadius + "%", minHeight: "max(84px, " + (mobileLogoSize + 12) + "px)" }}>
-        {(logoSettings?.visible ?? true) && (
+        {(logoSettings?.visible ?? true) && showWhiteLogo && (
+          <Link href="/" aria-label="Sterling Bloom home" className="sb-logo-white shrink-0">
+            <Image
+              src="/images/sterling_bloom_logo_white_horizontal.png"
+              alt="Sterling Bloom"
+              width={1545}
+              height={415}
+              priority
+              sizes="(max-width: 639px) 220px, 260px"
+              className="h-auto w-full drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]"
+            />
+          </Link>
+        )}
+        {(logoSettings?.visible ?? true) && !showWhiteLogo && (
           <Link
             href="/"
             aria-label="Sterling Bloom home"
@@ -91,7 +120,7 @@ export default function Navbar({ content, preview = false }) {
           </Link>
         )}
 
-        <div className="hidden items-center gap-6 md:flex lg:gap-8">
+        <div className="hidden items-center gap-6 lg:flex xl:gap-8">
           {navLinks.map((link) => (
             <Link key={link.name} href={link.href} className="text-sm transition-colors hover:text-[#D6B56D]">{link.name}</Link>
           ))}
@@ -105,7 +134,7 @@ export default function Navbar({ content, preview = false }) {
         </div>
 
         <button
-          className="group relative flex h-11 w-11 items-center justify-center rounded-[2px] border border-current/30 md:hidden"
+          className="group relative flex h-11 w-11 items-center justify-center rounded-[2px] border border-current/30 lg:hidden"
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Toggle navigation menu"
           aria-expanded={isOpen}
@@ -123,7 +152,7 @@ export default function Navbar({ content, preview = false }) {
       <div
         id="mobile-navigation"
         aria-hidden={!isOpen}
-        className={"max-h-[85vh] overflow-y-auto border-t border-black/5 bg-[#F8F7F4] px-5 text-[#6f5226] shadow-lg transition-all duration-300 ease-out md:hidden " + (isOpen ? "pb-6 pt-4 opacity-100" : "max-h-0 overflow-hidden pb-0 pt-0 opacity-0")}
+        className={"max-h-[85vh] overflow-y-auto border-t border-black/5 bg-[#F8F7F4] px-5 text-[#6f5226] shadow-lg transition-all duration-300 ease-out lg:hidden " + (isOpen ? "pb-6 pt-4 opacity-100" : "max-h-0 overflow-hidden pb-0 pt-0 opacity-0")}
       >
         <div className="flex flex-col gap-4">
           {navLinks.map((link) => (
