@@ -917,3 +917,17 @@ html[data-theme="dark"] body .eyebrow.sb-hero-eyebrow {
 /* Services swipe dots (own colours so dark-mode resets don't hide them). */
 html body #services .sb-service-dot-mark { background-color: rgba(182, 138, 53, .35) !important; }
 html body #services .sb-service-dot-mark.is-active { background-color: #B68A35 !important; }
+
+/* Process timeline: thin gold connecting line; circles cover the line with the section colour. */
+html body #process .sb-process-line { background-color: rgba(214, 181, 109, .55) !important; }
+html[data-theme] body #process li .sb-process-circle {
+  background-color: var(--sb-page-bg, #171614) !important;
+  transition: background-color .4s ease, color .4s ease, border-color .4s ease;
+}
+html[data-theme] body #process li:hover > .sb-process-circle { background-color: #B68A35 !important; border-color: #B68A35; color: #fff; }
+
+/* Tablets and computers: section headers read as one group (label to heading about 24px). */
+@media (min-width: 768px) {
+  main section .eyebrow + .h-px { margin-top: .75rem !important; margin-bottom: 0 !important; }
+  main section .eyebrow + .h-px + h2 { margin-top: .75rem !important; }
+}

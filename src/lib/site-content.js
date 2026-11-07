@@ -45,7 +45,7 @@ export const defaultSiteContent = {
       accentLight: "#D6B56D",
       dark: "#1D1813",
     },
-    layout: { contentWidth: 1280, sectionSpacing: 80, cardRadius: 20, cardPadding: 24 },
+    layout: { contentWidth: 1280, sectionSpacing: 56, cardRadius: 20, cardPadding: 24 },
   },
   hero: {
     eyebrow: "✨ Luxury Event Decor",
