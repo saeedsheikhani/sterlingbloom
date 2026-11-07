@@ -8,7 +8,8 @@ import { useGSAP } from "@gsap/react";
 
 gsap.registerPlugin(useGSAP);
 
-// Vertical video shown on phones. The admin "Hero Video" field is used on larger screens.
+// Vertical video shown on phones if the admin "Mobile Hero Video" field is empty.
+// The admin "Hero Video" field is used on larger screens.
 const MOBILE_VIDEO_URL = "https://res.cloudinary.com/xuv4gqwa/video/upload/v1794070444/sterling-bloom/bi5eczuoemda9ihrvuuh.mp4";
 const DEFAULT_BOOKING_URL = "https://calendly.com/sumaiya-sterlingbloomdecor/30min";
 
@@ -32,7 +33,7 @@ export default function Hero({ content }) {
     return () => mq.removeEventListener("change", update);
   }, []);
 
-  const videoSrc = isMobile ? (content.mobileVideo || MOBILE_VIDEO_URL || content.video) : content.video;
+  const videoSrc = isMobile ? (content.mobileVideo || MOBILE_VIDEO_URL) : content.video;
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
@@ -81,7 +82,7 @@ export default function Hero({ content }) {
             <h1
               ref={titleRef}
               style={{ opacity: 1 }}
-              className="mt-5 max-w-4xl font-[family-name:var(--font-display)] text-[3.25rem] font-medium leading-[0.94] tracking-[-0.025em] sm:text-6xl text-white sm:text-6xl lg:text-8xl"
+              className="mt-5 max-w-4xl font-[family-name:var(--font-display)] text-[2.5rem] font-medium leading-[1] tracking-[-0.025em] text-white sm:text-6xl sm:leading-[0.94] lg:text-8xl"
             >
               {content.before}{" "}
               <span className="special-text">{content.highlight}</span>
@@ -98,7 +99,7 @@ export default function Hero({ content }) {
 
             <div ref={buttonsRef} style={{ opacity: 1 }} className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row">
               {isCalendlyUrl(primaryHref) ? (
-                <button type="button" onClick={openCalendly} className="btn-primary">
+                <button type="button" onClick={(e) => openCalendly(e, primaryHref)} className="btn-primary">
                   {content.primaryButton}
                 </button>
               ) : (
