@@ -48,7 +48,7 @@ export default function About({ content }) {
           </ul>
 
           <div className="mt-7 sm:mt-9">
-            <Link href="#contact" className="btn-primary">
+            <Link href="#portfolio" className="btn-primary">
               {content.button}
             </Link>
           </div>
