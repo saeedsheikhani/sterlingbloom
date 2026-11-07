@@ -447,7 +447,6 @@ export default function ContentEditor({ initialContent }) {
       <SectionCard eyebrow="FEATURED WORK" title="Portfolio" onReset={() => resetSection("gallery")}>
         <div className="grid gap-5 sm:grid-cols-2">
           <Field label="Eyebrow" value={content.gallery.eyebrow} onChange={(v) => update("gallery", "eyebrow", v)} />
-          <Field label="Button" value={content.gallery.button} onChange={(v) => update("gallery", "button", v)} />
           <Field label="Heading" value={content.gallery.heading} onChange={(v) => update("gallery", "heading", v)} />
           <Field label="Bottom Note" value={content.gallery.note} onChange={(v) => update("gallery", "note", v)} />
         </div>
@@ -461,7 +460,7 @@ export default function ContentEditor({ initialContent }) {
               </div>
               <div className="grid gap-4 sm:grid-cols-3">
                 <Field label="Title" value={item.title} onChange={(v) => updateArray("gallery", "items", index, "title", v)} />
-                <Field label="Category" value={item.category} onChange={(v) => updateArray("gallery", "items", index, "category", v)} />
+                <Field label="Category" value={item.category} onChange={(v) => updateArray("gallery", "items", index, "category", v)} hint="Use weddings, ceremonies or mehndi." />
                 <MediaPicker label="Image" value={item.image} onChange={(v) => updateArray("gallery", "items", index, "image", v)} />
               </div>
             </div>

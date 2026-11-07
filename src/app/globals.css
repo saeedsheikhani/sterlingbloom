@@ -45,7 +45,7 @@ section { width: 100%; scroll-margin-top: 80px; }
     @apply inline-flex items-center rounded-[2px] border border-[#B68A35]/70 px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.22em] text-[#B68A35] sm:text-xs;
   }
   .special-text { @apply bg-gradient-to-r from-[#D6B56D] to-[#B68A35] bg-clip-text text-transparent; }
-  .section-heading { @apply text-[2.1rem] font-light leading-[1.08] tracking-[-0.03em] text-[#211d19] sm:text-5xl lg:text-6xl; }
+  .section-heading { font-family: var(--font-display); @apply text-[2.1rem] font-light leading-[1.08] tracking-[-0.03em] text-[#211d19] sm:text-5xl lg:text-6xl; }
   .section-copy { @apply text-[0.95rem] leading-7 text-gray-600 sm:text-lg sm:leading-8; }
 }
 
@@ -898,3 +898,12 @@ html[data-theme="dark"] body .eyebrow.sb-hero-eyebrow {
 }
 .sb-footer .sb-footer-icon:hover,
 .sb-footer .sb-footer-icon:focus-visible { background: #B68A35; color: #fff; }
+
+/* Phones: tighter, consistent section spacing (about 80px between sections). */
+@media (max-width: 767px) {
+  :root[data-site-theme] main section[class*="py-"],
+  main section[class*="py-"] { padding-top: 2.5rem !important; padding-bottom: 2.5rem !important; }
+}
+/* Services swipe dots (own colours so dark-mode resets don't hide them). */
+html body #services .sb-service-dot-mark { background-color: rgba(182, 138, 53, .35) !important; }
+html body #services .sb-service-dot-mark.is-active { background-color: #B68A35 !important; }
