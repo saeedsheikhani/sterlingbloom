@@ -393,6 +393,17 @@ html[data-theme="dark"] .sb-floating-book {
   background-color: var(--sb-accent) !important;
   color: #fff !important;
 }
+/* Hero secondary button: gold outline so the booking button stays the main action. */
+html[data-theme="dark"] .btn-ghost.sb-hero-outline {
+  background-color: transparent !important;
+  border: 1px solid #D6B56D !important;
+  color: #fff !important;
+}
+html[data-theme="dark"] .btn-ghost.sb-hero-outline:hover,
+html[data-theme="dark"] .btn-ghost.sb-hero-outline:focus-visible {
+  background-color: var(--sb-accent, #B68A35) !important;
+  border-color: var(--sb-accent, #B68A35) !important;
+}
 html[data-theme="dark"] .package-action:not(:hover):not(:focus-visible) { color: var(--sb-accent-light) !important; }
 html[data-theme="dark"] .package-action:hover,
 html[data-theme="dark"] .package-action:focus-visible { background-color: #9f762e !important; color: #fff !important; }

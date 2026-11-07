@@ -107,7 +107,7 @@ export default function Hero({ content }) {
                   {content.primaryButton}
                 </Link>
               )}
-              <Link href={content.secondaryButtonHref || "#portfolio"} className="btn-ghost border border-[#D6B56D] bg-transparent text-white hover:bg-[#B68A35] hover:text-white">
+              <Link href={content.secondaryButtonHref || "#portfolio"} className="btn-ghost sb-hero-outline">
                 {content.secondaryButton}
               </Link>
             </div>
