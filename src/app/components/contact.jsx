@@ -14,6 +14,7 @@ export default function Contact({ content }) {
   const [status, setStatus] = useState("idle");
   const [pendingForm, setPendingForm] = useState(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [receivedOpen, setReceivedOpen] = useState(false);
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -75,6 +76,7 @@ export default function Contact({ content }) {
       form.reset();
       setPendingForm(null);
       setStatus(emailSent ? "success" : "email-error");
+      setReceivedOpen(true);
     } catch (error) {
       console.error(error);
       setStatus("error");
@@ -162,9 +164,12 @@ export default function Contact({ content }) {
                 <textarea id="message" name="message" rows="4" placeholder="Tell us about your event, date, venue, and vision..." required className="w-full resize-none rounded-lg border border-gray-200 bg-white px-4 py-3.5 text-sm outline-none transition placeholder:text-gray-400 focus:border-[#B68A35] focus:ring-2 focus:ring-[#B68A35]/10" />
               </div>
 
-              {status === "success" && <p role="status" className="rounded-lg bg-green-50 px-4 py-3 text-sm text-green-700">Thank you. Your inquiry has been received. We’ll be in touch soon.</p>}
-              {status === "email-error" && <p role="status" className="rounded-lg bg-amber-50 px-4 py-3 text-sm text-amber-800">Your inquiry was saved, but the email notification could not be delivered. Please contact us directly if your request is urgent.</p>}
-              {status === "error" && <p role="alert" className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">We couldn't submit your inquiry. Please try again.</p>}
+              {status === "error" && (
+                <div role="alert" style={{ borderLeft: "3px solid #9A3B32", background: "#FBF0EE", padding: "16px 18px" }}>
+                  <p style={{ fontSize: "16px", fontWeight: 600, color: "#7A2A23", margin: 0 }}>Your inquiry didn’t go through.</p>
+                  <p style={{ fontSize: "14px", lineHeight: 1.6, color: "#5C5248", margin: "4px 0 0" }}>Please check your connection and try again, or contact us by phone or email.</p>
+                </div>
+              )}
 
               <button type="submit" disabled={status === "loading"} className="btn-primary w-full rounded-[2px] py-4 text-xs uppercase tracking-[0.18em] disabled:cursor-not-allowed disabled:opacity-60">
                 {status === "loading" ? "Sending..." : content.formButton}
@@ -181,6 +186,23 @@ export default function Contact({ content }) {
                   <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
                     <button type="button" className="sb-modal-secondary" onClick={() => { setConfirmOpen(false); setPendingForm(null); }}>Review details</button>
                     <button type="button" className="sb-modal-primary" onClick={submitInquiry}>Send inquiry</button>
+                  </div>
+                </section>
+              </div>
+            )}
+
+            {receivedOpen && (
+              <div className="sb-modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setReceivedOpen(false); }}>
+                <section className="sb-confirmation-modal" role="dialog" aria-modal="true" aria-labelledby="sb-received-title" aria-describedby="sb-received-description">
+                  <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-[#B68A35]">Inquiry received</p>
+                  <h4 id="sb-received-title" className="mt-3 font-[family-name:var(--font-display)] text-2xl text-[#211D19]">Thank you, we’ve received your inquiry.</h4>
+                  <p id="sb-received-description" className="mt-3 text-sm leading-6 text-[#71695e]">
+                    {status === "email-error"
+                      ? "We’ll review your details and get back to you soon. If your request is urgent, please also call or email us directly."
+                      : "We’ll review your details and get back to you within 1–2 business days."}
+                  </p>
+                  <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+                    <button type="button" className="sb-modal-primary" autoFocus onClick={() => setReceivedOpen(false)}>Done</button>
                   </div>
                 </section>
               </div>
