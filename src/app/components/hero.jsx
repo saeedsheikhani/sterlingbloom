@@ -83,7 +83,7 @@ export default function Hero({ content }) {
         <div className="mx-auto w-full max-w-7xl">
           <div className="max-w-4xl">
             {hasText(content.eyebrow) && (
-              <p ref={eyebrowRef} className="eyebrow mb-5 border-white/40 text-white">
+              <p ref={eyebrowRef} className="eyebrow sb-hero-eyebrow mb-5">
                 {content.eyebrow}
               </p>
             )}
