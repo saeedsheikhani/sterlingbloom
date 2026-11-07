@@ -767,9 +767,9 @@ html[data-theme="dark"] #contact > .relative.z-10 {
 /* Final compact theme control: isolate it from global button and flex sizing rules. */
 html body .sb-floating-actions { position: fixed !important; display: block !important; width: 0 !important; height: 0 !important; min-width: 0 !important; min-height: 0 !important; padding: 0 !important; margin: 0 !important; border: 0 !important; background: transparent !important; box-shadow: none !important; overflow: visible !important; right: 1rem !important; bottom: 1rem !important; left: auto !important; }
 html body .sb-floating-actions .sb-theme-toggle { position: fixed !important; right: 1rem !important; bottom: 1rem !important; display: flex !important; width: 3.25rem !important; height: 3.25rem !important; min-width: 3.25rem !important; max-width: 3.25rem !important; min-height: 3.25rem !important; padding: 0 !important; margin: 0 !important; border: 1px solid #b68a35 !important; background: #211d19 !important; color: #e6c783 !important; box-sizing: border-box !important; }
-html body .sb-floating-actions .sb-floating-book { position: fixed !important; right: 1rem !important; bottom: 4.75rem !important; }
+html body .sb-floating-actions .sb-floating-book { position: fixed !important; right: 1rem !important; bottom: 1rem !important; }
 html body .sb-floating-actions::before, html body .sb-floating-actions::after { content: none !important; display: none !important; }
-@media (max-width: 640px) { html body .sb-floating-actions .sb-theme-toggle { right: .75rem !important; bottom: .75rem !important; width: 3rem !important; height: 3rem !important; min-width: 3rem !important; max-width: 3rem !important; min-height: 3rem !important; } html body .sb-floating-actions .sb-floating-book { right: .75rem !important; bottom: 4.25rem !important; } }
+@media (max-width: 640px) { html body .sb-floating-actions .sb-theme-toggle { right: .75rem !important; bottom: .75rem !important; width: 3rem !important; height: 3rem !important; min-width: 3rem !important; max-width: 3rem !important; min-height: 3rem !important; } html body .sb-floating-actions .sb-floating-book { right: .75rem !important; bottom: .75rem !important; } }
 
 
 /* Animated FAQ accordion: height/opacity transition with reduced-motion support. */
