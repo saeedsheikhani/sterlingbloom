@@ -38,9 +38,43 @@ export default function Contact({ content }) {
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || "Submission failed.");
 
+      // The inquiry is saved. If the server could not send the email
+      // (Web3Forms' free plan only accepts browser submissions), send it from the browser.
+      let emailSent = data.emailSent === true;
+      const web3formsKey = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY;
+      if (!emailSent && web3formsKey) {
+        try {
+          const notification = await fetch("https://api.web3forms.com/submit", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Accept: "application/json" },
+            body: JSON.stringify({
+              access_key: web3formsKey,
+              subject: `New Sterling Bloom inquiry — ${eventType}`,
+              from_name: "Sterling Bloom Website",
+              replyto: payload.email,
+              name: payload.name,
+              email: payload.email,
+              phone: payload.phone,
+              eventType,
+              eventDate: payload.eventDate || "Not provided",
+              venue: payload.venue || "Not provided",
+              guestCount: payload.guestCount || "Not provided",
+              budget: payload.budget || "Not provided",
+              message: payload.message,
+              botcheck: "",
+            }),
+          });
+          const result = await notification.json().catch(() => ({}));
+          emailSent = notification.ok && result.success === true;
+          if (!emailSent) console.error("Web3Forms rejected the browser notification:", result.message);
+        } catch (notificationError) {
+          console.error("Browser notification failed:", notificationError);
+        }
+      }
+
       form.reset();
       setPendingForm(null);
-      setStatus(data.emailSent ? "success" : "email-error");
+      setStatus(emailSent ? "success" : "email-error");
     } catch (error) {
       console.error(error);
       setStatus("error");
@@ -117,11 +151,10 @@ export default function Contact({ content }) {
                 <label htmlFor="budget" className="mb-2 block text-[10px] font-medium uppercase tracking-[0.12em] text-gray-500 sm:text-xs">Estimated Budget <span className="normal-case tracking-normal">(optional)</span></label>
                 <select id="budget" name="budget" defaultValue="" className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3.5 text-sm text-gray-600 outline-none transition focus:border-[#B68A35] focus:ring-2 focus:ring-[#B68A35]/10">
                   <option value="">Prefer not to say</option>
-                  <option value="Under $2,500">Under $2,500</option>
-                  <option value="$2,500–$5,000">$2,500–$5,000</option>
                   <option value="$5,000–$10,000">$5,000–$10,000</option>
-                  <option value="$10,000+">$10,000+</option>
-                  <option value="Need guidance">Need guidance</option>
+                  <option value="$10,000–$20,000">$10,000–$20,000</option>
+                  <option value="$20,000+">$20,000+</option>
+                  <option value="Need guidance">Not sure yet, I'd like guidance</option>
                 </select>
               </div>
               <div>
