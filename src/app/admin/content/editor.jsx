@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { getPortfolioTabs, newPortfolioTabId, resolveItemTab } from "../../../lib/portfolio-tabs";
 
 function Field({ label, value, onChange, multiline = false, hint, type = "text", min, max, step }) {
   const common = {
@@ -245,6 +246,44 @@ export default function ContentEditor({ initialContent }) {
     }));
   }
 
+  // Portfolio tabs: stable ids, editable labels. Items store the tab id in `category`.
+  function setPortfolioTabs(tabs) {
+    update("gallery", "tabs", tabs);
+  }
+
+  function movePortfolioTab(index, direction) {
+    const tabs = [...getPortfolioTabs(content.gallery)];
+    const target = index + direction;
+    if (target < 0 || target >= tabs.length) return;
+    [tabs[index], tabs[target]] = [tabs[target], tabs[index]];
+    setPortfolioTabs(tabs);
+  }
+
+  function removePortfolioTab(index) {
+    const tabs = getPortfolioTabs(content.gallery);
+    const tab = tabs[index];
+    const used = content.gallery.items.filter((item) => resolveItemTab(item.category, tabs) === tab.id);
+    if (used.length > 0) {
+      const name = tab.label || "this tab";
+      const message = used.length + " portfolio item" + (used.length === 1 ? " uses" : "s use") + " \u201c" + name + "\u201d. " + (used.length === 1 ? "It" : "They") + " will only show under All until you assign " + (used.length === 1 ? "it" : "them") + " to another tab. Remove this tab?";
+      if (!window.confirm(message)) return;
+    }
+    setContent((current) => {
+      const currentTabs = getPortfolioTabs(current.gallery);
+      return {
+        ...current,
+        gallery: {
+          ...current.gallery,
+          tabs: currentTabs.filter((_, i) => i !== index),
+          // Unassign items that pointed at the removed tab.
+          items: current.gallery.items.map((item) =>
+            resolveItemTab(item.category, currentTabs) === tab.id ? { ...item, category: "" } : item,
+          ),
+        },
+      };
+    });
+  }
+
   function addItem(section, key, item) {
     setContent((current) => ({
       ...current,
@@ -451,6 +490,32 @@ export default function ContentEditor({ initialContent }) {
           <Field label="Bottom Note" value={content.gallery.note} onChange={(v) => update("gallery", "note", v)} />
         </div>
         <Field label="Description" value={content.gallery.description} onChange={(v) => update("gallery", "description", v)} multiline />
+
+        <div className="rounded-2xl border border-gray-200 bg-[#FBFAF7] p-5">
+          <p className="text-xs font-medium uppercase tracking-[0.14em] text-gray-500">Portfolio Tabs</p>
+          <p className="mt-1 text-[11px] leading-5 text-gray-400">Filter tabs shown above the portfolio. Tabs with no items are hidden on the website.</p>
+          <ul className="mt-4 space-y-2">
+            <li className="flex items-center gap-2">
+              <span className="flex-1 rounded-xl border border-dashed border-gray-200 bg-white/60 px-4 py-3 text-sm text-gray-400">All <span className="text-[11px]">(always first)</span></span>
+            </li>
+            {getPortfolioTabs(content.gallery).map((tab, index, tabs) => (
+              <li key={tab.id} className="flex items-center gap-2">
+                <input
+                  value={tab.label ?? ""}
+                  onChange={(event) => setPortfolioTabs(tabs.map((t, i) => (i === index ? { ...t, label: event.target.value } : t)))}
+                  aria-label={"Tab " + (index + 1) + " name"}
+                  placeholder="Tab name"
+                  className="min-w-0 flex-1 rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-[#211d19] outline-none transition focus:border-[#B68A35] focus:ring-2 focus:ring-[#B68A35]/10"
+                />
+                <button type="button" onClick={() => movePortfolioTab(index, -1)} disabled={index === 0} aria-label={"Move " + (tab.label || "tab") + " up"} className="h-11 w-9 rounded-xl border border-gray-200 text-gray-500 hover:border-[#B68A35] hover:text-[#B68A35] disabled:opacity-30">↑</button>
+                <button type="button" onClick={() => movePortfolioTab(index, 1)} disabled={index === tabs.length - 1} aria-label={"Move " + (tab.label || "tab") + " down"} className="h-11 w-9 rounded-xl border border-gray-200 text-gray-500 hover:border-[#B68A35] hover:text-[#B68A35] disabled:opacity-30">↓</button>
+                <button type="button" onClick={() => removePortfolioTab(index)} className="px-2 text-xs text-gray-400 hover:text-red-600">Remove</button>
+              </li>
+            ))}
+          </ul>
+          <button type="button" onClick={() => setPortfolioTabs([...getPortfolioTabs(content.gallery), { id: newPortfolioTabId(), label: "New tab" }])} className="mt-3 text-xs font-medium uppercase tracking-[0.12em] text-[#B68A35]">+ Add tab</button>
+        </div>
+
         <div className="space-y-4">
           {content.gallery.items.map((item, index) => (
             <div key={item.id || index} className="rounded-2xl border border-gray-200 bg-[#FBFAF7] p-5">
@@ -460,12 +525,24 @@ export default function ContentEditor({ initialContent }) {
               </div>
               <div className="grid gap-4 sm:grid-cols-3">
                 <Field label="Title" value={item.title} onChange={(v) => updateArray("gallery", "items", index, "title", v)} />
-                <Field label="Category" value={item.category} onChange={(v) => updateArray("gallery", "items", index, "category", v)} hint="Use weddings, ceremonies or mehndi." />
+                <label className="block">
+                  <span className="text-[10px] font-medium uppercase tracking-[0.14em] text-gray-500">Category</span>
+                  <select
+                    value={resolveItemTab(item.category, getPortfolioTabs(content.gallery)) ?? ""}
+                    onChange={(event) => updateArray("gallery", "items", index, "category", event.target.value)}
+                    className="mt-2 w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-[#211d19] outline-none transition focus:border-[#B68A35] focus:ring-2 focus:ring-[#B68A35]/10"
+                  >
+                    <option value="">Not assigned (shows under All only)</option>
+                    {getPortfolioTabs(content.gallery).map((tab) => (
+                      <option key={tab.id} value={tab.id}>{tab.label || "Untitled tab"}</option>
+                    ))}
+                  </select>
+                </label>
                 <MediaPicker label="Image" value={item.image} onChange={(v) => updateArray("gallery", "items", index, "image", v)} />
               </div>
             </div>
           ))}
-          <button type="button" onClick={() => addItem("gallery", "items", { id: Date.now(), title: "New Work", category: "weddings", image: "" })} className="text-xs font-medium uppercase tracking-[0.12em] text-[#B68A35]">+ Add portfolio item</button>
+          <button type="button" onClick={() => addItem("gallery", "items", { id: Date.now(), title: "New Work", category: getPortfolioTabs(content.gallery)[0]?.id || "", image: "" })} className="text-xs font-medium uppercase tracking-[0.12em] text-[#B68A35]">+ Add portfolio item</button>
         </div>
       </SectionCard>
 

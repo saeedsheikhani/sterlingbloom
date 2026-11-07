@@ -899,10 +899,20 @@ html[data-theme="dark"] body .eyebrow.sb-hero-eyebrow {
 .sb-footer .sb-footer-icon:hover,
 .sb-footer .sb-footer-icon:focus-visible { background: #B68A35; color: #fff; }
 
-/* Phones: tighter, consistent section spacing (about 80px between sections). */
+/* Phones: tighter, consistent section spacing (about 64px between sections),
+   and section headers that read as one group: label, heading and description about 16px apart. */
 @media (max-width: 767px) {
   :root[data-site-theme] main section[class*="py-"],
-  main section[class*="py-"] { padding-top: 2.5rem !important; padding-bottom: 2.5rem !important; }
+  main section[class*="py-"] { padding-top: 2rem !important; padding-bottom: 2rem !important; }
+
+  /* Gold divider line under the label: split the 16px around it. */
+  main section .eyebrow + .h-px { margin-top: .5rem !important; margin-bottom: 0 !important; }
+  main section .eyebrow + .h-px + h2 { margin-top: .5rem !important; }
+  /* Label directly above the heading (no divider). */
+  main section .eyebrow + h2,
+  main section p + h2 { margin-top: 1rem !important; }
+  /* Heading to description. */
+  main section h2 + p { margin-top: 1rem !important; }
 }
 /* Services swipe dots (own colours so dark-mode resets don't hide them). */
 html body #services .sb-service-dot-mark { background-color: rgba(182, 138, 53, .35) !important; }
