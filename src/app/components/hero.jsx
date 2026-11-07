@@ -8,9 +8,13 @@ import { useGSAP } from "@gsap/react";
 
 gsap.registerPlugin(useGSAP);
 
+// Vertical video shown on phones. The admin "Hero Video" field is used on larger screens.
+const MOBILE_VIDEO_URL = "https://res.cloudinary.com/xuv4gqwa/video/upload/v1794070444/sterling-bloom/bi5eczuoemda9ihrvuuh.mp4";
+const DEFAULT_BOOKING_URL = "https://calendly.com/sumaiya-sterlingbloomdecor/30min";
+
 export default function Hero({ content }) {
   const heroRef = useRef(null);
-  const primaryHref = content.primaryButtonHref && content.primaryButtonHref !== "#contact" ? content.primaryButtonHref : "https://calendly.com/murtazasiddiqui250/30min";
+  const primaryHref = content.primaryButtonHref && content.primaryButtonHref !== "#contact" ? content.primaryButtonHref : DEFAULT_BOOKING_URL;
   const titleRef = useRef(null);
   const textRef = useRef(null);
   const buttonsRef = useRef(null);
@@ -18,6 +22,17 @@ export default function Hero({ content }) {
   const scrollRef = useRef(null);
   const eyebrowRef = useRef(null);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobile, setIsMobile] = useState(null);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  const videoSrc = isMobile ? (content.mobileVideo || MOBILE_VIDEO_URL || content.video) : content.video;
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
@@ -28,7 +43,7 @@ export default function Hero({ content }) {
   useGSAP(() => {
     // Keep hero copy visible immediately on mobile/slow connections; animate only the background video.
     if (videoRef.current) gsap.fromTo(videoRef.current, { scale: 1.06 }, { scale: 1, duration: 2, ease: "power2.out" });
-  }, { scope: heroRef });
+  }, { scope: heroRef, dependencies: [videoSrc] });
 
   return (
     <section
@@ -37,7 +52,9 @@ export default function Hero({ content }) {
       className="relative min-h-[100svh] overflow-hidden bg-[#1d1813] bg-cover bg-center lg:min-h-screen"
       style={{ backgroundImage: `url("${content.backgroundImage || "/images/hero.jpg"}")` }}
     >
+      {isMobile !== null && videoSrc && (
       <video
+        key={videoSrc}
         ref={videoRef}
         autoPlay
         muted
@@ -47,9 +64,9 @@ export default function Hero({ content }) {
         aria-hidden="true"
         className="absolute inset-0 z-0 h-full w-full object-cover"
       >
-        <source src={content.video} type="video/mp4" />
-        <source src="/videos/hero.webm" type="video/webm" />
+        <source src={videoSrc} type="video/mp4" />
       </video>
+      )}
 
       <div className="absolute inset-0 z-10 bg-black/45" />
       <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/55 via-black/25 to-black/10" />
